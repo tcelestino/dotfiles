@@ -1,7 +1,7 @@
 # This is Git's per-user configuration file.
 [user]
 	name = Tiago Celestino
-	email = myemail
+	email = tcelestino@gmail.com
 [alias]
 	co = checkout
 	ci = commit
@@ -9,4 +9,4 @@
 	br = branch
 	ph = push
 	pu = pull
-	hs = log --decorate --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan  )<%an>%Creset' --abbrev-commit --graph
+	log = log --decorate --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan  )<%an>%Creset' --abbrev-commit --graph

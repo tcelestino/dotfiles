@@ -10,7 +10,7 @@ defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
 # disbale transparency menu bar yosemite
 defaults write com.apple.universalaccess reduceTransparency -bool true
 
-# Disable the â€œAre you sure you want to open this application?â€ dialog
+# Disable the you sure you want to open this application?â€ dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # Reveal IP address, hostname, OS version, etc. when clicking the clock
