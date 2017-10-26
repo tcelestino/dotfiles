@@ -143,10 +143,16 @@ defaults write org.m0k.transmission WarningDonate -bool false
 # Hide the legal disclaimer
 defaults write org.m0k.transmission WarningLegal -bool false
 
+# Sublime Text #
+createSublimeSymbol() {
+  ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/sublime
+}
+
 # Kill all application #
 #############################################################################################
 
 ScreenShotConfig()
+createSublimeSymbol()
 
 for app in "Dock" "Finder" "Safari" "SystemUIServer" "Terminal" "Transmission"; do
   killall "${app}" > /dev/null 2>&1
