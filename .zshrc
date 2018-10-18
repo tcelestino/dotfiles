@@ -86,20 +86,3 @@ export SSH_KEY_PATH="~/.ssh/dsa_id"
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-
-# global
-alias zshconfig="sublime ~/.zshrc"
-alias ohmyzsh="sublime ~/.oh-my-zsh"
-alias reload="source ~/.zshrc"
-alias hd="cd /Volumes/HD"
-alias work="cd /Volumes/HD/Workspace"
-alias learn="cd /Volumes/HD/Learning"
-
-#development
-alias server="python -m SimpleHTTPServer"
-
-# mac
-alias shutdown="sudo shutdown -h now"
-alias cl="clear"
-alias dns_clear="dscacheutil -flushcache"
-alias hosts="code /private/etc/hosts"

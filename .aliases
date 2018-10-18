@@ -1,0 +1,36 @@
+# oh-my-zsh
+alias zshconfig="$EDITOR ~/.zshrc"
+alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
+alias reload="source ~/.zshrc"
+
+#development
+alias server="python -m SimpleHTTPServer"
+
+# mac
+alias hd="cd /Volumes/HD"
+alias work="cd /Volumes/HD/Workspace"
+alias learn="cd /Volumes/HD/Learning"
+alias shutdown="sudo shutdown -h now"
+alias hosts="sudo $EDITOR /etc/hosts"
+alias dns_clear="dscacheutil -flushcache"
+
+# mv, rm, cp
+alias mv='mv -v'
+alias rm='rm -i -v'
+alias cp='cp -v'
+
+# Easier navigation: .., ..., ~ and -
+alias cl="clear"
+alias ..="cd .."
+alias cd..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ~="cd ~" # `cd` is probably faster to type though
+alias -- -="cd -"
+
+alias chmox='chmod -x'
+alias where=which
+
+# File size
+alias fs="stat -f \"%z bytes\""

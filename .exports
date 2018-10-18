@@ -1,0 +1,5 @@
+# vim as default
+export EDITOR="vim"
+
+# node
+export NODE_ENV="development"

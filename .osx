@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #~/.osx.sh
 
 # based on paul irish osx.sh (https://github.com/paulirish/dotfiles/blob/master/.osx)

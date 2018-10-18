@@ -37,5 +37,8 @@
   pushalltags = !git remote | xargs -n1 git push --tags
 
 alias = !git config --get alias.$1 && echo > /dev/null
+
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore
+  attributesfile = ~/.gitattributes
