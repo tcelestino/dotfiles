@@ -49,7 +49,7 @@ ZSH_THEME="honukai"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-#plugins=(git osx)
+plugins=(git mysql node)
 
 # User configuration
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.$JAVA_VERSION)"
@@ -57,15 +57,12 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH=/usr/share/maven/bin:$PATH
 export PATH=$HOME/local/bin:$PATH
 export PATH=$HOME/mongodb/bin:$PATH
+export PATH=$PATH:~/.composer/vendor/bin
+export NPM_PACKAGES="${HOME}/.npm-packages"
+export PATH="$NPM_PACKAGES/bin:$PATH"
+
 #export PATH=$HOME/node/bin:$PATH
 #export PATH=$HOME/npm/bin:$PATH
-
-#export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-#NPM_PACKAGES="${HOME}/.npm-packages"
-#PATH="$NPM_PACKAGES/bin:$PATH"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -73,11 +70,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='mvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -96,6 +93,7 @@ alias ohmyzsh="sublime ~/.oh-my-zsh"
 alias reload="source ~/.zshrc"
 alias hd="cd /Volumes/HD"
 alias work="cd /Volumes/HD/Workspace"
+alias learn="cd /Volumes/HD/Learning"
 
 #development
 alias server="python -m SimpleHTTPServer"
@@ -104,4 +102,4 @@ alias server="python -m SimpleHTTPServer"
 alias shutdown="sudo shutdown -h now"
 alias cl="clear"
 alias dns_clear="dscacheutil -flushcache"
-alias hosts="sublime /private/etc/hosts"
+alias hosts="code /private/etc/hosts"
