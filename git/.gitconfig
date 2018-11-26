@@ -11,7 +11,7 @@
   df = diff -b
   di = diff -b
   #lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%an, %cr)%Creset' --abbrev-commit --date=relative
-  lg = log --graph --all --pretty=format:'%C(yellow)%h %ad %Cblue%an%C(auto)%d %Creset%s' --date=short --decorate
+  lg = log --graph --all --pretty=format:'%C(yellow)%h %ad %C(green)%an%C(auto)%d %Creset%s' --date=short --decorate
   ls = lg
   ph = push origin HEAD
   st = status
