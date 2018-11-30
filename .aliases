@@ -6,6 +6,10 @@ alias reload="source ~/.zshrc"
 #development
 alias server="python -m SimpleHTTPServer"
 
+# npx
+alias commit="npx git-cz" #commit using git-cz package
+alias react_app="npx create-react-app" # create react app
+
 # mac
 alias hd="cd /Volumes/HD"
 alias work="cd /Volumes/HD/Workspace"
@@ -18,11 +22,13 @@ alias dns_clear="dscacheutil -flushcache"
 alias mv='mv -v'
 alias rm='rm -i -v'
 alias cp='cp -v'
+alias md="mkdir"
+alias rd="rmdir"
+alias del="rm -i"
 
 # Easier navigation: .., ..., ~ and -
 alias cl="clear"
 alias ..="cd .."
-alias cd..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
