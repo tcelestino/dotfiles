@@ -1,0 +1,44 @@
+# This is Git's per-user configuration file.
+
+[user]
+	name = Tiago Celestino
+	email = tiago.farias@catho.com
+
+[alias]
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff -b
+  di = diff -b
+  #lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%an, %cr)%Creset' --abbrev-commit --date=relative
+  lg = log --graph --all --pretty=format:'%C(yellow)%h %ad %C(green)%an%C(auto)%d %Creset%s' --date=short --decorate
+  ls = lg
+  ph = push origin HEAD
+  st = status
+  amend = commit --amend -C HEAD
+
+  fu  = fetch origin
+  pum = pull origin master
+  pud = pull origin dev
+  fupum = !git co master && git fu && git pum
+  fupud = !git co dev && git fu && git pud
+  rebasemaster = !branch=\"`git branch 2>/dev/null | grep \\* | awk '{ print $2 }'`\" && echo \"Rebasing $branch from master...\" && git fupum && git co $branch && git rebase master -i
+  cob = !git fetch origin && git co -b $1 origin/$1 && echo \"Checked out origin branch:\"
+  cod = "!git br -D $1 2> /dev/null; git cob $1"
+
+  optimize = !git br | grep -v master | xargs git br -D && git fetch origin && git remote prune origin && git reflog expire --expire=now --all && git gc --prune=now && git gc --aggressive --prune=now
+  branchage = for-each-ref --sort=-committerdate refs/remotes/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+
+  new = !git fupum && git co -b $1 && echo \"Created branch with name $1 from master \n\"
+  arc = !git add . && git rebase --continue
+  ra = !git amend --reset-author -n
+
+  pushall = !git remote | xargs -n1 git push
+  pushalltags = !git remote | xargs -n1 git push --tags
+
+alias = !git config --get alias.$1 && echo > /dev/null
+
+[core]
+	editor = vim
+	excludesfile = ~/.gitignore
+  attributesfile = ~/.gitattributes
