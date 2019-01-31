@@ -99,5 +99,5 @@ function herokulogs() {
 # $1: type (JHFS+) $2: name disk $3: partions
 # use diskutil list to show the partions list
 function format() {
-	diskutil eraseDisk $1 JHFS+ $2 $3
+	diskutil eraseDisk $1 $2 $3
 }
