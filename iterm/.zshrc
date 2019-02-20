@@ -3,7 +3,7 @@ export ZSH=/Users/tcelestino/.oh-my-zsh
 
 ZSH_THEME="honukai"
 
-plugins=(osx vscode git node composer docker docker-compose iterm2)
+plugins=(osx vscode git node composer docker docker-compose iterm2 zsh-autosuggestions)
 
 # User configuration
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.$JAVA_VERSION)"
