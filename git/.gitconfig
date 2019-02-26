@@ -1,8 +1,8 @@
 # This is Git's per-user configuration file.
 
 [user]
-	name = Tiago Celestino
-	email = tiago.farias@catho.com
+	name = <ADD-YOUR-NAME-HERE>
+	email = <ADD-YOUR-EMAIL-HERE>
 
 [alias]
   ci = commit
