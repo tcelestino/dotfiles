@@ -40,3 +40,8 @@ alias where=which
 
 # File size
 alias fs="stat -f \"%z bytes\""
+
+# docker
+alias dockercleand='docker rmi $(docker images -q)' #delete all images
+alias dockercleanu='docker rmi $(docker images -q -f dangling=true)' # delete all untagged images
+alias dockercleans='docker rm $(docker ps -a -q)' #delete all stopped images
