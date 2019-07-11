@@ -35,6 +35,7 @@
 
   pushall = !git remote | xargs -n1 git push
   pushalltags = !git remote | xargs -n1 git push --tags
+  deletebranches = !git branch | grep -v "master" | xargs git branch -D
 
 alias = !git config --get alias.$1 && echo > /dev/null
 
