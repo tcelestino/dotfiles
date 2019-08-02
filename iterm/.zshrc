@@ -2,8 +2,9 @@
 export ZSH=/Users/tcelestino/.oh-my-zsh
 
 ZSH_THEME="honukai"
+FRONTEND_SEARCH_FALLBACK="duckduckgo"
 
-plugins=(osx vscode git node composer docker docker-compose iterm2 zsh-autosuggestions)
+plugins=(osx vscode git node composer docker docker-compose iterm2 zsh-autosuggestions frontend-search)
 
 # User configuration
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.$JAVA_VERSION)"
@@ -15,13 +16,15 @@ export PATH=$PATH:~/.composer/vendor/bin
 export NPM_PACKAGES="${HOME}/.npm-packages"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 
+export GH_TOKEN=
+
 source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='mvim'
+  export EDITOR='code'
 fi
 
 # ssh
