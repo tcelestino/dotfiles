@@ -1,0 +1,53 @@
+# get current location
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+echo "running from $DIR..."
+
+# **********************************
+# GIT
+#
+
+# remove ~/.gitconfig
+if [ -f ~/.gitconfig ]; then
+  echo "found old ~/.gitconfig - removing..."
+  rm ~/.gitconfig
+fi
+
+# link ~/.gitconfig
+echo "sym linking new ~/.gitconfig with $DIR/.gitconfig!\n"
+ln -s $DIR/git/.gitconfig ~/.gitconfig
+
+# *********************************
+# zsh
+#
+if [ -L ~/.zshrc ]; then
+  echo "found .zshrc - removing..."
+  rm ~/.zshrc
+fi
+
+echo $'linking .zshrc\n'
+ln -s $DIR/.zshrc ~/.zshrc
+
+if [ -L ~/.oh-my-zsh/themes/honukai.zsh-theme ]; then
+  echo "found old honukai.zsh-theme - removing..."
+  rm ~/.oh-my-zsh/themes/honukai.zsh-theme
+fi
+
+echo $'linking honukai zsh-theme\n'
+ln -s $DIR/iterm/honukai.zsh-theme ~/.oh-my-zsh/themes/honukai.zsh-theme
+
+if [ -L ~/.oh-my-zsh/custom/aliases.zsh ]; then
+  echo "found old aliases.zsh - removing..."
+  rm ~/.oh-my-zsh/custom/aliases.zsh
+fi
+
+# *************************************
+# npm
+#
+if [ -L ~/.npmrc ]; then
+  echo "found old .npmrc - removing..."
+  rm ~/.npmrc
+fi
+
+echo $'linking .npmrc\n'
+ln -s $DIR/.npmrc ~/.npmrc
