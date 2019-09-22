@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/tcelestino/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 ZSH_THEME="honukai"
 FRONTEND_SEARCH_FALLBACK="duckduckgo"
@@ -15,7 +15,6 @@ export PATH=$HOME/mongodb/bin:$PATH
 export PATH=$PATH:~/.composer/vendor/bin
 export NPM_PACKAGES="${HOME}/.npm-packages"
 export PATH="$NPM_PACKAGES/bin:$PATH"
-
 export GH_TOKEN=
 
 source $ZSH/oh-my-zsh.sh
