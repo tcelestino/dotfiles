@@ -1,8 +1,8 @@
 # This is Git's per-user configuration file.
 
 [user]
-	name = <ADD-YOUR-NAME-HERE>
-	email = <ADD-YOUR-EMAIL-HERE>
+	name = <YOUR-NAME-HERE>
+	email = <YOUR-EMAIL-HERE>
 
 [alias]
   ci = commit
@@ -10,7 +10,7 @@
   co = checkout
   df = diff -b
   di = diff -b
-  #lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%an, %cr)%Creset' --abbrev-commit --date=relative
+  dt = difftool
   lg = log --graph --all --pretty=format:'%C(yellow)%h %ad %C(green)%an%C(auto)%d %Creset%s' --date=short --decorate
   ls = lg
   ph = push origin HEAD
@@ -39,6 +39,8 @@
 
 alias = !git config --get alias.$1 && echo > /dev/null
 
+[mergetool]
+  keepBackup = true
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore
