@@ -42,6 +42,6 @@ alias = !git config --get alias.$1 && echo > /dev/null
 [mergetool]
   keepBackup = true
 [core]
-	editor = vim
-	excludesfile = ~/.gitignore
+  editor = vim
+  excludesfile = ~/.gitignore
   attributesfile = ~/.gitattributes
