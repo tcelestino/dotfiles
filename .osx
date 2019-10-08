@@ -49,6 +49,9 @@ defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 # Automatically quit printer app once the print jobs complete
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
+# Remove delay when taking a screenshot
+defaults write com.apple.screencapture show-thumbnail -bool false
+
 # Reveal IP address, hostname, OS version, etc. when clicking the clock
 # in the login window
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
