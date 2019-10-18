@@ -71,6 +71,7 @@ clone() {
 alias dockercleand='docker rmi $(docker images -q)' #delete all images
 alias dockercleanu='docker rmi $(docker images -q -f dangling=true)' # delete all untagged images
 alias dockercleans='docker rm $(docker ps -a -q)' #delete all stopped images
+alias dcu='docker-compose up' #start with docker-composer
 
 # others
 alias fs="stat -f \"%z bytes\""
