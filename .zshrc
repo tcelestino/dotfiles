@@ -4,7 +4,7 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="honukai"
 FRONTEND_SEARCH_FALLBACK="duckduckgo"
 
-plugins=(osx vscode git node composer docker docker-compose iterm2 zsh-autosuggestions frontend-search)
+plugins=(osx vscode git node composer docker docker-compose iterm2 frontend-search)
 
 # User configuration
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.$JAVA_VERSION)"
