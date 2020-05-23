@@ -113,3 +113,12 @@ function node-project() {
   git add -A
   git commit -m "Initial commit"
 }
+
+# yarn project
+npm() {
+  if [ -e yarn.lock ]; then
+    echo "This yarn project. Use yarn instead of"
+  else
+    command npm $@
+  fi
+}
