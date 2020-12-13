@@ -8,6 +8,7 @@
   ci = commit
   br = branch
   co = checkout
+  del = delete -D
   df = diff -b
   di = diff -b
   dt = difftool
@@ -16,6 +17,8 @@
   ph = push origin HEAD
   st = status
   amend = commit --amend -C HEAD
+
+  undo = reset HEAD~1 --mixed
 
   fu  = fetch origin
   pum = pull origin master
