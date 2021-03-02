@@ -22,10 +22,13 @@
 
   fu  = fetch origin
   pum = pull origin master
+  pumn = pull origin main
   pud = pull origin dev
   fupum = !git co master && git fu && git pum
+  fupumn = !git co main && git fu && git pumn
   fupud = !git co dev && git fu && git pud
   rebasemaster = !branch=\"`git branch 2>/dev/null | grep \\* | awk '{ print $2 }'`\" && echo \"Rebasing $branch from master...\" && git fupum && git co $branch && git rebase master -i
+  rebasemain = !branch=\"`git branch 2>/dev/null | grep \\* | awk '{ print $2 }'`\" && echo \"Rebasing $branch from main...\" && git fupumn && git co $branch && git rebase main -i
   cob = !git fetch origin && git co -b $1 origin/$1 && echo \"Checked out origin branch:\"
   cod = "!git br -D $1 2> /dev/null; git cob $1"
 
