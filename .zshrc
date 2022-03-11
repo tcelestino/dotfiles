@@ -3,7 +3,9 @@ export ZSH=$HOME/.oh-my-zsh
 
 ZSH_THEME="awesomepanda"
 
-plugins=(alias-finder copypath copyfile extract macos vscode git node npm github composer docker docker-compose iterm2 yarn)
+plugins=(alias-finder copypath copyfile extract macos vscode git gh node npm composer docker docker-compose iterm2 yarn sudo history zsh-autosuggestions)
+
+# how to install zsh-autosuggestions - https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 
 # User configuration
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.$JAVA_VERSION)"
@@ -15,7 +17,8 @@ export PATH=$PATH:~/.composer/vendor/bin
 export NPM_PACKAGES="${HOME}/.npm-packages"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export GH_TOKEN=
+export GH_TOKEN={YOUR GITHUB TOKEN}
+export NPM_TOKEN={YOUR NPM TOKEN}
 
 source $ZSH/oh-my-zsh.sh
 
