@@ -28,13 +28,13 @@ fi
 echo $'linking .zshrc\n'
 ln -s $DIR/.zshrc ~/.zshrc
 
-if [ -L ~/.oh-my-zsh/themes/honukai.zsh-theme ]; then
-  echo "found old honukai.zsh-theme - removing..."
+if [ -L ~/.oh-my-zsh/themes/awesomepanda.zsh-theme ]; then
+  echo "found old awesomepanda.zsh-theme - removing..."
   rm ~/.oh-my-zsh/themes/honukai.zsh-theme
 fi
 
 echo $'linking honukai zsh-theme\n'
-ln -s $DIR/iterm/honukai.zsh-theme ~/.oh-my-zsh/themes/honukai.zsh-theme
+ln -s $DIR/iterm/awesomepanda.zsh-theme ~/.oh-my-zsh/themes/awesomepanda.zsh-theme
 
 if [ -L ~/.oh-my-zsh/custom/aliases.zsh ]; then
   echo "found old aliases.zsh - removing..."
