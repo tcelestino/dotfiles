@@ -35,3 +35,14 @@ chmod +x install
 ```bash
 ./install
 ```
+
+## Applications
+
+My essential applications on macOS and Linux
+
+|            | Description                                                                                                                         | OS        | Download                             |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------------------------ |
+| Raycast    | Raycast is a blazingly fast, totally extendable launcher. It lets you complete tasks, calculate, share common links, and much more. | macOS     | [raycast.com](raycast.com)           |
+| tldr pages | Simplified and community-driven man pages                                                                                           | Universal | [https://tldr.sh/](https://tldr.sh/) |
+| stats      | macOS system monitor in your menu bar                                                                                               | macOS     | https://github.com/exelban/stats     |
+| Marktext   | A simple and elegant markdown editor, available for Linux, macOS and Windows.                                                       | Universal | https://github.com/marktext/marktext |
