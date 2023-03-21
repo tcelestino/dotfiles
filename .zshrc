@@ -77,6 +77,20 @@ alias where=which
 # File size
 alias fs="stat -f \"%z bytes\""
 
+
+# Utils
+function checkPort
+  lsof -t -i:$argv[1]
+end
+
+function killPort
+  kill -9 (lsof -t -i:$argv[1])
+end
+
+alias checkport=checkPort
+alias killport=killPort
+alias killnode="killall -9 node"
+
 # Docker
 alias dockercleand='docker rmi $(docker images -q)' #delete all images
 alias dockercleanu='docker rmi $(docker images -q -f dangling=true)' # delete all untagged images
