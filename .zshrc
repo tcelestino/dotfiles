@@ -29,6 +29,14 @@ else
   export EDITOR='code'
 fi
 
+function checkPort {
+  lsof -t -i:$argv[1]
+}
+
+function killPort {
+  kill -9 (lsof -t -i:$argv[1])
+}
+
 # ssh
 export SSH_KEY_PATH="~/.ssh/dsa_id"
 
@@ -61,6 +69,9 @@ alias rd="rmdir"
 alias del="rm -i"
 alias rd="rmdir"
 alias del="rm -i"
+
+alias checkport=checkPort
+alias killport=killPort
 
 alias killnode="killall -9 node"
 
