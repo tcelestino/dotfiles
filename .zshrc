@@ -3,7 +3,7 @@ export ZSH=$HOME/.oh-my-zsh
 
 ZSH_THEME="awesomepanda"
 
-plugins=(alias-finder copypath copyfile extract macos vscode git gh node npm composer docker docker-compose iterm2 yarn sudo history zsh-autosuggestions)
+plugins=(alias-finder copypath copyfile extract macos vscode git-extras git gh node npm composer docker docker-compose iterm2 yarn sudo history zsh-autosuggestions httpie web-search)
 
 # how to install zsh-autosuggestions - https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 
