@@ -7,7 +7,6 @@ Welcome to my dotfiles configuration repository. This project serves as a centra
 Dotfiles are hidden configuration files in your home directory that control the behavior and appearance of your favorite software tools. This repository contains my carefully curated dotfiles, including configurations for:
 
 - **Shell Profiles**: I've customized my shell environment, whether it's Zsh, to boost productivity and enhance my terminal experience.
-- **Text Editors**: My preferences for text editors like Visual Studio Code.
 - **Version Control**: Fine-tuned Git settings for a seamless version control experience.
 - **Window Managers**: Personalizations for window managers.
 - **System Settings**: Tweaks and settings for the Linux or macOS system itself.
@@ -23,4 +22,16 @@ Feel free to explore, adapt, and reuse any of my configurations in your own setu
 
 ```bash
 git clone https://github.com/tcelestino/dotfiles.git ~/.dotfiles
+```
+
+2. Set run file to install
+
+```bash
+chmod +x install
+```
+
+3. Install
+
+```bash
+./install
 ```
