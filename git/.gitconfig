@@ -25,19 +25,36 @@
   fupum = !git co master && git fu && git pum
   fupumn = !git co main && git fu && git pumn
   fupud = !git co dev && git fu && git pud
-  rebasemaster = !branch=\"`git branch 2>/dev/null | grep \\* | awk '{ print $2 }'`\" && echo \"Rebasing $branch from master...\" && git fupum && git co $branch && git rebase master -i
-  rebasemain = !branch=\"`git branch 2>/dev/null | grep \\* | awk '{ print $2 }'`\" && echo \"Rebasing $branch from main...\" && git fupumn && git co $branch && git rebase main -i
+  rb = "!f() { \
+      branch=\"$(git branch 2>/dev/null | grep \\* | awk '{ print $2 }')\" && \
+      if git rev-parse --verify master >/dev/null 2>&1; then \
+          echo \"Rebasing $branch from master...\" && git fupum && git co $branch && git rebase master -i; \
+      elif git rev-parse --verify main >/dev/null 2>&1; then \
+          echo \"Rebasing $branch from main...\" && git fupumn && git co $branch && git rebase main -i; \
+      else \
+          echo \"Neither master nor main branch exists.\"; \
+      fi \
+  }; f"
   cob = !git fetch origin && git co -b $1 origin/$1 && echo \"Checked out origin branch:\"
   cod = "!git br -D $1 2> /dev/null; git cob $1"
   optimize = !git br | grep -v master | xargs git br -D && git fetch origin && git remote prune origin && git reflog expire --expire=now --all && git gc --prune=now && git gc --aggressive --prune=now
   branchage = for-each-ref --sort=-committerdate refs/remotes/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
-  new = !git fupum && git co -b $1 && echo \"Created branch with name $1 from master \n\"
+  new = "!f() { \
+        if git rev-parse --verify master >/dev/null 2>&1; then \
+            git fupum && git co -b $1 && echo \"Created branch with name $1 from master \n\"; \
+        elif git rev-parse --verify main >/dev/null 2>&1; then \
+            git fupumn && git co -b $1 && echo \"Created branch with name $1 from main \n\"; \
+        else \
+            echo \"Neither master nor main branch exists.\"; \
+        fi \
+  }; f"
   arc = !git add . && git rebase --continue
   ra = !git amend --reset-author -n
   pushall = !git remote | xargs -n1 git push
   pushalltags = !git remote | xargs -n1 git push --tags
   deletebranches = !git branch --merged | grep -v \\* | xargs git branch -D
   prune = !git remote prune origin
+  cleanup = "!f() { git branch | grep -v \" $(git rev-parse --abbrev-ref HEAD)\" | xargs git branch -D; git fetch --prune;}; f"
 
 alias = !git config --get alias.$1 && echo > /dev/null
 
