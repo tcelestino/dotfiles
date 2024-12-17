@@ -51,3 +51,29 @@ fi
 
 echo $'linking .npmrc\n'
 ln -s $DIR/.npmrc ~/.npmrc
+
+# *************************************
+# brew bundle install
+if [ -f ~/Brewfile ]; then
+  echo "found old Brewfile - removing..."
+  rm ~/Brewfile
+fi
+
+echo $'linking Brewfile\n'
+ln -s $DIR/Brewfile ~/Brewfile
+
+brew_install() {
+  echo "executing brew bundle install..."
+  brew bundle install
+}
+
+brew_install
+
+# duti configuration
+if [ -f ~/duti_picview.config ]; then
+  echo "found old ~/duti_picview.config - removing..."
+  rm ~/duti_picview.config
+fi
+
+echo $'linking duti config\n'
+ln -s $DIR/duti_picview.config ~/duti_picview.config
