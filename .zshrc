@@ -15,8 +15,8 @@ export PATH=$PATH:~/.composer/vendor/bin
 export NPM_PACKAGES="${HOME}/.npm-packages"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export GH_TOKEN={YOUR GITHUB TOKEN}
-export NPM_TOKEN={YOUR NPM TOKEN}
+export GH_TOKEN="YOUR GITHUB TOKEN"
+export NPM_TOKEN="YOUR NPM TOKEN"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -36,21 +36,19 @@ function killPort {
 }
 
 # ssh
-export SSH_KEY_PATH="~/.ssh/dsa_id"
+export SSH_KEY_PATH="~/.ssh/id_ed" # cat ~/.ssh/id_ed
 
 # oh-my-zsh
 alias zshconfig="$EDITOR ~/.zshrc"
 alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
 alias reload="source ~/.zshrc"
 
-#development
+# servers
 alias server="python -m SimpleHTTPServer"
-alias dcu="docker-compose up"
 alias serveo="ssh -R 80:localhost:3000 serveo.net"
 
 # npx
 alias commit="npx git-cz" #commit using git-cz package
-alias react-app="npx create-react-app" # create react app
 
 # mac
 alias work="~/Projects"
@@ -88,12 +86,13 @@ alias where=which
 # File size
 alias fs="stat -f \"%z bytes\""
 
-# Docker
+# Docker && docker-compose
 alias dockercleand='docker rmi $(docker images -q)' #delete all images
 alias dockercleanu='docker rmi $(docker images -q -f dangling=true)' # delete all untagged images
 alias dockercleans='docker rm $(docker ps -a -q)' #delete all stopped images
 alias dockerstop='docker stop $(docker ps -aq)' #stop all container
 alias hostclean='export DOCKER_HOST='
+alias dcu="docker-compose up"
 
 # npm
 alias npm-i='npm install'
