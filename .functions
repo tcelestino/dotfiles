@@ -122,3 +122,15 @@ npm() {
     command npm $@
   fi
 }
+
+# git
+clone() {
+  git clone $1
+  cd $(basename ${1%.*})
+  if test -f "./package.json"; then
+    echo "..."
+    echo "Found package.json... installing dependencies"
+    echo "..."
+    npm i
+  fi
+}
