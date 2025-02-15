@@ -30,10 +30,10 @@ ln -s $DIR/.zshrc ~/.zshrc
 
 if [ -L ~/.oh-my-zsh/themes/awesomepanda.zsh-theme ]; then
   echo "found old awesomepanda.zsh-theme - removing..."
-  rm ~/.oh-my-zsh/themes/honukai.zsh-theme
+  rm ~/.oh-my-zsh/themes/awesomepanda.zsh-theme
 fi
 
-echo $'linking honukai zsh-theme\n'
+echo $'linking awesomepanda zsh-theme\n'
 ln -s $DIR/iterm/awesomepanda.zsh-theme ~/.oh-my-zsh/themes/awesomepanda.zsh-theme
 
 if [ -L ~/.oh-my-zsh/custom/aliases.zsh ]; then
@@ -68,7 +68,7 @@ brew_install() {
 }
 
 brew_install
-
+# *************************************
 # duti configuration
 if [ -f ~/duti_picview.config ]; then
   echo "found old ~/duti_picview.config - removing..."
