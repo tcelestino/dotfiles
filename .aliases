@@ -24,8 +24,7 @@ alias npm-reset='rm -rf node_modules && rm -f package-lock.json && npm install &
 alias npm-ri='rm -rf node_modules && npm i'
 
 # npx
-alias commit="npx git-cz"
-alias react_app="npx create-react-app"
+alias commit="npx git-cz --disable-emoji"
 
 # mac
 alias hd="cd /Volumes/HD"
@@ -37,6 +36,7 @@ alias dns_clear="dscacheutil -flushcache"
 
 # directory
 alias downloads='cd ~/Downloads/'
+alias projects='cd ~/Projects/'
 
 # mv, rm, cp
 alias mv='mv -v'
@@ -55,23 +55,11 @@ alias .....="cd ../../../.."
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
-# git
-clone() {
-  git clone $1
-  cd $(basename ${1%.*})
-  if test -f "./package.json"; then
-    echo "..."
-    echo "Found package.json... installing dependencies"
-    echo "..."
-    npm install
-  fi
-}
-
 # docker
-alias dockercleand='docker rmi $(docker images -q)' #delete all images
+alias dockercleand='docker rmi $(docker images -q)' # delete all images
 alias dockercleanu='docker rmi $(docker images -q -f dangling=true)' # delete all untagged images
-alias dockercleans='docker rm $(docker ps -a -q)' #delete all stopped images
-alias dockerstop='docker stop $(docker ps -aq)' #stop all container
+alias dockercleans='docker rm $(docker ps -a -q)' # delete all stopped images
+alias dockerstop='docker stop $(docker ps -aq)' # stop all container
 alias dcu='docker-compose up' #start with docker-composer
 
 # others

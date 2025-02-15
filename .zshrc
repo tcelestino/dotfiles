@@ -1,9 +1,8 @@
-# Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
 ZSH_THEME="awesomepanda"
 
-plugins=(alias-finder copypath copyfile extract macos vscode git-extras git gh node npm composer docker docker-compose iterm2 yarn sudo history httpie web-search)
+plugins=(alias-finder copypath copyfile extract macos vscode git-extras git gh node npm docker docker-compose iterm2 yarn sudo history httpie)
 
 # User configuration
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.$JAVA_VERSION)"
@@ -12,6 +11,8 @@ export PATH=/usr/share/maven/bin:$PATH
 export PATH=$HOME/local/bin:$PATH
 export PATH=$HOME/mongodb/bin:$PATH
 export PATH=$PATH:~/.composer/vendor/bin
+export PATH="/opt/homebrew/bin:$PATH" # brew on Apple Silicon
+export PATH="/usr/local/bin:$PATH" # brew on Intel
 export NPM_PACKAGES="${HOME}/.npm-packages"
 export PATH="$NPM_PACKAGES/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
@@ -48,7 +49,7 @@ alias server="python -m SimpleHTTPServer"
 alias serveo="ssh -R 80:localhost:3000 serveo.net"
 
 # npx
-alias commit="npx git-cz" #commit using git-cz package
+alias commit="npx git-cz --disable-emoji" #commit using git-cz node.js package
 
 # mac
 alias work="~/Projects"
@@ -87,12 +88,12 @@ alias where=which
 alias fs="stat -f \"%z bytes\""
 
 # Docker && docker-compose
-alias dockercleand='docker rmi $(docker images -q)' #delete all images
+alias dockercleand='docker rmi $(docker images -q)' # delete all images
 alias dockercleanu='docker rmi $(docker images -q -f dangling=true)' # delete all untagged images
-alias dockercleans='docker rm $(docker ps -a -q)' #delete all stopped images
-alias dockerstop='docker stop $(docker ps -aq)' #stop all container
-alias hostclean='export DOCKER_HOST='
-alias dcu="docker-compose up"
+alias dockercleans='docker rm $(docker ps -a -q)' # delete all stopped images
+alias dockerstop='docker stop $(docker ps -aq)' # stop all container
+alias hostclean='export DOCKER_HOST=' # clean DOCKER_HOST
+alias dcu="docker-compose up" # start with docker-composer
 
 # npm
 alias npm-i='npm install'
