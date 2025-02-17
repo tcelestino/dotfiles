@@ -1,83 +1,94 @@
-# get current location
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "running from $DIR..."
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
 
-# **********************************
-# GIT
-#
+# Get current location
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-# remove ~/.gitconfig
-if [ -f ~/.gitconfig ]; then
-  echo "found old ~/.gitconfig - removing..."
-  rm ~/.gitconfig
-fi
-
-# link ~/.gitconfig
-echo "sym linking new ~/.gitconfig with $DIR/.gitconfig!\n"
-ln -s $DIR/git/.gitconfig ~/.gitconfig
-
-# *********************************
-# zsh
-#
-if [ -L ~/.zshrc ]; then
-  echo "found .zshrc - removing..."
-  rm ~/.zshrc
-fi
-
-echo $'linking .zshrc\n'
-ln -s $DIR/.zshrc ~/.zshrc
-
-if [ -L ~/.oh-my-zsh/themes/awesomepanda.zsh-theme ]; then
-  echo "found old awesomepanda.zsh-theme - removing..."
-  rm ~/.oh-my-zsh/themes/awesomepanda.zsh-theme
-fi
-
-echo $'linking awesomepanda zsh-theme\n'
-ln -s $DIR/iterm/awesomepanda.zsh-theme ~/.oh-my-zsh/themes/awesomepanda.zsh-theme
-
-if [ -L ~/.oh-my-zsh/custom/aliases.zsh ]; then
-  echo "found old aliases.zsh - removing..."
-  rm ~/.oh-my-zsh/custom/aliases.zsh
-fi
-
-echo $'linking aliases\n'
-ln -s $DIR/aliases.zsh ~/.oh-my-zsh/custom/aliases.zsh
-
-# *************************************
-# npm
-#
-if [ -L ~/.npmrc ]; then
-  echo "found old .npmrc - removing..."
-  rm ~/.npmrc
-fi
-
-echo $'linking .npmrc\n'
-ln -s $DIR/.npmrc ~/.npmrc
-
-# *************************************
-# brew bundle install
-if [ -f ~/Brewfile ]; then
-  echo "found old Brewfile - removing..."
-  rm ~/Brewfile
-fi
-
-echo $'linking Brewfile\n'
-ln -s $DIR/Brewfile ~/Brewfile
-
-brew_install() {
-  echo "executing brew bundle install..."
-  brew bundle install
+log() {
+  echo -e "${GREEN}[INFO]${NC} $1"
 }
 
-brew_install
+error() {
+  echo -e "${RED}[ERROR]${NC} $1"
+  exit 1
+}
 
-# *************************************
-# duti configuration
-if [ -f ~/duti_picview.config ]; then
-  echo "found old ~/duti_picview.config - removing..."
-  rm ~/duti_picview.config
-fi
+check_dependencies() {
+  command -v brew >/dev/null 2>&1 || error "Homebrew is required but not installed. https://brew.sh/"
+}
 
-echo $'linking duti config\n'
-ln -s $DIR/duti_picview.config ~/duti_picview.config
+safe_link() {
+  local src="$1"
+  local dest="$2"
+
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+      log "Found $dest - removing..."
+      rm -f "$dest"
+  fi
+
+  if [ ! -e "$src" ]; then
+      error "Source file $src does not exist!"
+  fi
+
+  log "Linking $dest to $src"
+  ln -s "$src" "$dest"
+}
+
+install_oh_my_zsh() {
+  if [ -d "$HOME/.oh-my-zsh" ]; then
+      log "oh-my-zsh is already installed."
+  else
+      log "Installing oh-my-zsh..."
+      if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
+          error "Failed to install oh-my-zsh"
+      fi
+  fi
+}
+
+setup_git() {
+  safe_link "$DIR/git/.gitconfig" "$HOME/.gitconfig"
+}
+
+setup_zsh() {
+  safe_link "$DIR/.zshrc" "$HOME/.zshrc"
+  safe_link "$DIR/iterm/awesomepanda.zsh-theme" "$HOME/.oh-my-zsh/themes/awesomepanda.zsh-theme"
+  safe_link "$DIR/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+}
+
+setup_npm() {
+  safe_link "$DIR/.npmrc" "$HOME/.npmrc"
+}
+
+setup_brew() {
+  safe_link "$DIR/Brewfile" "$HOME/Brewfile"
+  log "Executing brew bundle install..."
+  if ! brew bundle install; then
+      error "Brew bundle install failed"
+  fi
+}
+
+setup_duti() {
+  safe_link "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config"
+}
+
+main() {
+  log "Starting installation from $DIR..."
+
+  check_dependencies
+
+  setup_git
+  install_oh_my_zsh
+  setup_zsh
+  setup_npm
+  setup_brew
+  setup_duti
+
+  log "Installation completed successfully! 🎉"
+}
+
+main "$@"
