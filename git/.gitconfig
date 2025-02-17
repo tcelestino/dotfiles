@@ -1,8 +1,20 @@
 # This is Git's per-user configuration file.
 
 [user]
-	name = <YOUR-NAME-HERE>
-	email = <YOUR-EMAIL-HERE>
+  name = "<YOUR-NAME-HERE>"
+  email = "<YOUR-EMAIL-HERE>"
+
+[mergetool]
+  keepBackup = true
+
+[core]
+  editor = vim
+  excludesfile = ~/.gitignore
+  attributesfile = ~/.gitattributes
+
+[init]
+  defaultBranch = main
+
 
 [alias]
   ci = commit
@@ -55,16 +67,3 @@
   deletebranches = !git branch --merged | grep -v \\* | xargs git branch -D
   prune = !git remote prune origin
   cleanup = "!f() { git branch | grep -v \" $(git rev-parse --abbrev-ref HEAD)\" | xargs git branch -D; git fetch --prune;}; f"
-
-alias = !git config --get alias.$1 && echo > /dev/null
-
-[mergetool]
-  keepBackup = true
-
-[core]
-  editor = vim
-  excludesfile = ~/.gitignore
-  attributesfile = ~/.gitattributes
-
-[init]
-	defaultBranch = main
