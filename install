@@ -41,6 +41,9 @@ if [ -L ~/.oh-my-zsh/custom/aliases.zsh ]; then
   rm ~/.oh-my-zsh/custom/aliases.zsh
 fi
 
+echo $'linking aliases\n'
+ln -s $DIR/aliases.zsh ~/.oh-my-zsh/custom/aliases.zsh
+
 # *************************************
 # npm
 #
@@ -68,6 +71,7 @@ brew_install() {
 }
 
 brew_install
+
 # *************************************
 # duti configuration
 if [ -f ~/duti_picview.config ]; then
