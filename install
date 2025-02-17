@@ -20,6 +20,7 @@ error() {
 
 check_dependencies() {
   command -v brew >/dev/null 2>&1 || error "Homebrew is required but not installed. https://brew.sh/"
+  command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
 }
 
 safe_link() {
@@ -45,8 +46,19 @@ install_oh_my_zsh() {
   else
       log "Installing oh-my-zsh..."
       if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
-          error "Failed to install oh-my-zsh"
+          error "Failed to install Deno"
       fi
+  fi
+}
+
+install_deno() {
+  if [ -d "$HOME/.deno/bin/deno" ]; then
+    log "deno is already installed.."
+  else
+    log ""
+    if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
+      error "Failed to install oh-my-zsh"
+    fi
   fi
 }
 
@@ -81,8 +93,10 @@ main() {
 
   check_dependencies
 
-  setup_git
   install_oh_my_zsh
+  install_deno
+
+  setup_git
   setup_zsh
   setup_npm
   setup_brew
