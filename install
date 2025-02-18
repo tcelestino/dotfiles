@@ -89,6 +89,7 @@ setup_zsh() {
   safe_link "$DIR/zsh/.zshrc" "$HOME/.zshrc"
   safe_link "$DIR/zsh/themes/dracula.zsh-theme" "$HOME/.oh-my-zsh/themes/dracula.zsh-theme"
   safe_link "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+  safe_link "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
 }
 
 setup_npm() {
