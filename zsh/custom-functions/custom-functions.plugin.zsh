@@ -41,3 +41,13 @@ clone() {
     npm i
   fi
 }
+
+# check service port
+function checkPort {
+  lsof -t -i:$argv[1]
+}
+
+# kill service
+function killPort {
+  kill -9 (lsof -t -i:$argv[1])
+}

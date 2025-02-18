@@ -59,13 +59,5 @@ alias chmox='chmod -x'
 alias where=which
 alias killnode="killall -9 node"
 
-function checkPort {
-  lsof -t -i:$argv[1]
-}
-
-function killPort {
-  kill -9 (lsof -t -i:$argv[1])
-}
-
-alias checkport=checkPort
-alias killport=killPort
+alias checkport=checkPort # use my zsh custom plugin
+alias killport=killPort # use my zsh custom plugin
