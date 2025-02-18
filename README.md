@@ -1,6 +1,8 @@
 # Dotfiles
 
-This repository is the central hub for my personal configurations, settings, and customizations across various software applications and operating systems. I primarily `zsh` as my shell, but you can set up your own configurations for `bash` or any other shell.
+This repository serves as the central hub for my personal configurations, settings, and customizations across various software applications. I primarily use `zsh` as my shell, but you can set up your own configurations for `bash` or any other shell.
+
+I'm used to macOS and Ubuntu, so my configurations are tailored to these operating systems. However, you can easily adapt them to work on other systems as well.
 
 ## Usage
 
@@ -17,7 +19,7 @@ git clone https://github.com/tcelestino/dotfiles.git ~/.dotfiles
 2. Set run file to install
 
 ```bash
-chmod +x install
+cd ~/.dotfiles && chmod +x install
 ```
 
 3. Install
