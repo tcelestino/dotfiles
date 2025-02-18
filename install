@@ -98,9 +98,9 @@ setup_npm() {
 
   # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
   if [ -d "$HOME/.npm-packages" ]; then
-    log ".npm-package folder existed"
+    log ".npm-packages folder exists"
   else
-    mkdir "$HOME/.npm-packages"
+    mkdir -p "$HOME/.npm-packages"
   fi
 }
 
