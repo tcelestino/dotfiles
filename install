@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
 # Colors for output
@@ -96,6 +97,15 @@ setup_npm() {
   safe_link "$DIR/.npmrc" "$HOME/.npmrc"
 }
 
+npm_pkg() {
+  if ! command -v node >/dev/null 2>&1; then
+    error "Node.js is required but not installed. https://nodejs.org/"
+  fi
+
+  log "Installing global npm packages..."
+  npm install -g git-cz # https://github.com/streamich/git-cz
+}
+
 setup_brew() {
   safe_link "$DIR/Brewfile" "$HOME/Brewfile"
   log "Executing brew bundle install..."
@@ -119,10 +129,13 @@ main() {
   setup_git
   setup_zsh
   setup_npm
+  npm_pkg
   setup_brew
   setup_duti
 
-  log "Installation completed successfully! 🎉"
+  sh .macos
+
+  log "Settings completed successfully! 🎉"
 }
 
 main "$@"
