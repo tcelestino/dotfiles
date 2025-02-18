@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-#~/.osx.sh
+#~/.macos
 
-# based on paul irish osx.sh (https://github.com/paulirish/dotfiles/blob/master/.osx)
+# based on paul irish .macos (https://github.com/paulirish/dotfiles/blob/main/.macos)
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
