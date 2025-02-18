@@ -23,11 +23,11 @@ alias npm-run='npm run'
 alias npm-reset='rm -rf node_modules && rm -f package-lock.json && npm install && npx node-notifier-cli -t "Done" -m "npm modules reinstalled" -s Glass -i https://cdn.rawgit.com/npm/logos/31945b5c/npm%20square/n-64.png'
 alias npm-ri='rm -rf node_modules && npm i'
 
-# npx
+# git
 alias commit="git-cz --disable-emoji"
 
 # mac
-alias hd="cd /Volumes/HD"
+# alias hd="cd /Volumes/HD"
 alias shutdown="sudo shutdown -h now"
 alias hosts="sudo $EDITOR /etc/hosts"
 alias dns_clear="dscacheutil -flushcache"
