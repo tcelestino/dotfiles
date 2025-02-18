@@ -36,5 +36,31 @@ cd ~/.dotfiles && chmod +x install
 
 If you have any suggestions, improvements, or bug fixes, feel free to open an issue or submit a pull request. I'm always looking for ways to improve my configurations and make them more efficient and user-friendly. Read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
+## Changelog
+
+The CHANGELOG is automatically generated using GitHub Actions and git-cliff when a Pull Request is merged into the main branch. The process uses conventional commits to categorize changes:
+
+- 🚀 Features: `feat: feature description`
+- 🐛 Bug Fixes: `fix: bug fix description`
+- 📝 Documentation: `docs: description of the change`
+- ⚡️ Performance: `perf: description of the improvement`
+- ♻️ Refactoring: `refactor: description of the change`
+- 🎨 Style: `style: description of the change`
+- ✅ Tests: `test: description of the test`
+- 📦 Dependencies: `chore(deps): description of the update`
+- 🛠 Chores: `chore: description of the task`
+
+For breaking changes, add `!` after the type or include `BREAKING CHANGE:` in the commit body:
+```bash
+# Using ! after the type
+feat!: change that breaks compatibility
+
+# Or using BREAKING CHANGE in the body
+feat: change that breaks compatibility
+
+BREAKING CHANGE: detailed description of the breaking change
+```
+The CHANGELOG.md will be automatically updated after the PR is merged.
+
 ## License
 See in [LICENSE](LICENSE).
