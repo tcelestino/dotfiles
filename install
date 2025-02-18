@@ -66,18 +66,18 @@ install_oh_my_zsh() {
   else
       log "Installing oh-my-zsh..."
       if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
-          error "Failed to install Deno"
+          error "Failed to install oh-my-zsh"
       fi
   fi
 }
 
 install_deno() {
   if [ -d "$HOME/.deno/bin/deno" ]; then
-    log "deno is already installed.."
+    log "Deno is already installed.."
   else
     log "Installing Deno"
     if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
-      error "Failed to install oh-my-zsh"
+      error "Failed to install Deno"
     fi
   fi
 }
