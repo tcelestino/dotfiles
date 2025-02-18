@@ -26,6 +26,10 @@ chmod +x install
 ./install
 ```
 
+## Additional Configurations
+
+- To set the keyboard layout to include the 'ç' character on Ubuntu, follow the steps in the article "[Ajeitando o cedilha errado (ć) no Ubuntu Linux](https://www.danielkossmann.com/pt/ajeitando-cedilha-errado-ubuntu-linux/)"
+
 ## Contributing
 
 If you have any suggestions, improvements, or bug fixes, feel free to open an issue or submit a pull request. I'm always looking for ways to improve my configurations and make them more efficient and user-friendly. Read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
