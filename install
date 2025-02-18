@@ -55,7 +55,7 @@ install_deno() {
   if [ -d "$HOME/.deno/bin/deno" ]; then
     log "deno is already installed.."
   else
-    log ""
+    log "Installing Deno"
     if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
       error "Failed to install oh-my-zsh"
     fi
@@ -67,9 +67,9 @@ setup_git() {
 }
 
 setup_zsh() {
-  safe_link "$DIR/.zshrc" "$HOME/.zshrc"
-  safe_link "$DIR/iterm/awesomepanda.zsh-theme" "$HOME/.oh-my-zsh/themes/awesomepanda.zsh-theme"
-  safe_link "$DIR/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+  safe_link "$DIR/zsh/.zshrc" "$HOME/.zshrc"
+  safe_link "$DIR/zsh/dracula.zsh-theme" "$HOME/.oh-my-zsh/themes/dracula.zsh-theme"
+  safe_link "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
 }
 
 setup_npm() {
