@@ -125,6 +125,36 @@ setup_duti() {
   safe_link "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config"
 }
 
+setup_fonts() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    local font_dir="$HOME/Library/Fonts"
+    if [ ! -d "$font_dir" ]; then
+      mkdir -p "$font_dir"
+    fi
+    log "Installing fonts for macOS..."
+    cp "$DIR/fonts/"* "$font_dir/"
+  elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Ubuntu/Linux
+    local font_dir="$HOME/.local/share/fonts"
+    if [ ! -d "$font_dir" ]; then
+      mkdir -p "$font_dir"
+    fi
+    log "Installing fonts for Linux..."
+    cp "$DIR/fonts/"* "$font_dir/"
+    fc-cache -f -v
+  else
+    error "Unsupported operating system"
+  fi
+}
+
+setup_macos() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    log "Setting up macOS..."
+    sh .macos
+  fi
+}
+
 main() {
   log "Starting installation from $DIR..."
 
@@ -139,8 +169,8 @@ main() {
   npm_pkg
   setup_brew
   setup_duti
-
-  sh .macos
+  setup_fonts
+  setup_macos
 
   log "Settings completed successfully! 🎉"
 }
