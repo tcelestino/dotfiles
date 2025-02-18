@@ -68,7 +68,7 @@ setup_git() {
 
 setup_zsh() {
   safe_link "$DIR/zsh/.zshrc" "$HOME/.zshrc"
-  safe_link "$DIR/zsh/dracula.zsh-theme" "$HOME/.oh-my-zsh/themes/dracula.zsh-theme"
+  safe_link "$DIR/zsh/themes/dracula.zsh-theme" "$HOME/.oh-my-zsh/themes/dracula.zsh-theme"
   safe_link "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
 }
 
