@@ -40,6 +40,25 @@ safe_link() {
   ln -s "$src" "$dest"
 }
 
+safe_copy_dir() {
+    local src="$1"
+    local dest="$2"
+
+    if [ ! -d "$src" ]; then
+        error "Source directory $src does not exist!"
+    fi
+
+    if [ -d "$dest" ]; then
+        log "Found $dest - removing..."
+        rm -rf "$dest"
+    fi
+
+    log "Copying directory $src to $dest"
+    if ! cp -R "$src" "$dest"; then
+        error "Failed to copy directory $src to $dest"
+    fi
+}
+
 install_oh_my_zsh() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
       log "oh-my-zsh is already installed."
