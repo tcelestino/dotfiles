@@ -1,16 +1,6 @@
 # Dotfiles
 
-Welcome to my dotfiles configuration repository. This project serves as a central hub for my personal configurations, settings, and customizations across various software applications and operating systems.
-
-## Overview
-
-Dotfiles are hidden configuration files in your home directory that control the behavior and appearance of your favorite software tools. This repository contains my carefully curated dotfiles, including configurations for:
-
-- **Shell Profiles**: I've customized my shell environment, whether it's Zsh, to boost productivity and enhance my terminal experience.
-- **Version Control**: Fine-tuned Git settings for a seamless version control experience.
-- **Window Managers**: Personalizations for window managers.
-- **System Settings**: Tweaks and settings for the Linux or macOS system itself.
-- **Development Tools**: Configuration for development tools.
+This repository is the central hub for my personal configurations, settings, and customizations across various software applications and operating systems. I primarily `zsh` as my shell, but you can set up your own configurations for `bash` or any other shell.
 
 ## Usage
 
@@ -35,3 +25,10 @@ chmod +x install
 ```bash
 ./install
 ```
+
+## Contributing
+
+If you have any suggestions, improvements, or bug fixes, feel free to open an issue or submit a pull request. I'm always looking for ways to improve my configurations and make them more efficient and user-friendly. Read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
+
+## License
+See in [LICENSE](LICENSE).
