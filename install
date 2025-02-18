@@ -95,6 +95,13 @@ setup_zsh() {
 
 setup_npm() {
   safe_link "$DIR/.npmrc" "$HOME/.npmrc"
+
+  # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
+  if [ -d "$HOME/.npm-packages" ]; then
+    log ".npm-package folder existed"
+  else
+    mkdir "$HOME/.npm-packages"
+  fi
 }
 
 npm_pkg() {
