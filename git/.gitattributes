@@ -1,0 +1,40 @@
+# Default setting: normalize line endings to LF
+* text=auto
+
+# Source code files
+*.js    text
+*.ts    text
+*.tsx   text
+*.py    text
+*.java  text
+*.html  text
+*.css   text
+*.scss  text
+
+# Documentation
+*.md    text diff=markdown
+*.txt   text
+*.pdf   binary
+
+# Images and binary
+*.png   binary
+*.jpg   binary
+*.gif   binary
+*.ico   binary
+*.zip   binary
+
+# System-specific scripts
+*.sh    text eol=lf
+*.bat   text eol=crlf
+
+# Files that should not be modified
+package-lock.json binary
+yarn.lock         binary
+
+# Files that should always be merged using specific strategies
+*.sql       merge=union
+db.xml      merge=union
+
+# Ignore files in the repository's language statistics
+docs/**     linguist-documentation
+vendor/**   linguist-vendored
