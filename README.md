@@ -38,9 +38,7 @@ cd ~/.dotfiles && chmod +x install
 
 If you have any suggestions, improvements, or bug fixes, feel free to open an issue or submit a pull request. I'm always looking for ways to improve my configurations and make them more efficient and user-friendly. Read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
-### Changelog
-
-The CHANGELOG is automatically generated using GitHub Actions and git-cliff when a pull request is merged into the main branch. The process uses conventional commits to categorize changes:
+This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. Please use it when making changes to the codebase.
 
 - 🚀 Features: `feat: feature description`
 - 🐛 Bug Fixes: `fix: bug fix description`
