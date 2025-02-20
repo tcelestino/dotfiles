@@ -20,6 +20,7 @@ error() {
 }
 
 check_dependencies() {
+  command -v node >/dev/null 2>&1 || error "Node.js is required but not installed. https://nodejs.org/"
   command -v brew >/dev/null 2>&1 || error "Homebrew is required but not installed. https://brew.sh/"
   command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
 }
