@@ -1,26 +1,24 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
 ## [unreleased]
 
 ### ♻️ Refactor
 
 - Update files
-- 💡 create execute files
-- 💡 change font-size and tabs position
-- 💡 changes color to improvements to read
-- 💡 rollback git settings files
-- 💡 add ${HOME} to make a path
-- 💡 change path screenshot saves
-- 💡 changes loglevel silly to http
+- Create execute files
+- Change font-size and tabs position
+- Changes color to improvements to read
+- Rollback git settings files
+- Add ${HOME} to make a path
+- Change path screenshot saves
+- Changes loglevel silly to http
 - Verify if there is a oh-my-zsh folder
 - Remove personal infos
 - Remove email and name
 - Remove auto-suggest plugin
 - Change to set username
 - Change theme
-- 💡 organize file
+- Organize file
 - Update brew apps
 - Remove alias and update plugins
 - Improvement install process
@@ -42,8 +40,8 @@ All notable changes to this project will be documented in this file.
 
 ### 📝 Documentation
 
-- ✏️ add details about this project
-- ✏️ adding instruction to install
+- Add details about this project
+- Adding instruction to install
 - Update project infos
 - Create docs to contributing, license and gh actions
 - Update pull request template
@@ -57,12 +55,12 @@ All notable changes to this project will be documented in this file.
 
 - Add new files
 - Create install file
-- 🎸 add iterm 2 settings
-- 🎸 npm settings
-- 🎸 add npx alias
-- 🎸 add iterm settings and remove another configs
-- 🎸 create exec files
-- 🎸 add loglevel settings
+- Add iterm 2 settings
+- Add npm settings
+- Add npx alias
+- Add iterm settings and remove another configs
+- Create exec files
+- Add loglevel settings
 - Add node project started function
 - Add zsh auto suggestion plugin
 - Create git config global
@@ -91,9 +89,9 @@ All notable changes to this project will be documented in this file.
 - Add new osx settings
 - Update alias to git and unix process
 - Set no-op
-- 🎸 add new plugins
-- 🎸 create and update alias
-- 🎸 add github settings (workflow, codeowner, pr template)
+- Add new plugins
+- Create and update alias
+- Add github settings (workflow, codeowner, pr template)
 - Update bundle
 - Run brew bundle install and duti settings
 - Create zsh alias
@@ -114,7 +112,7 @@ All notable changes to this project will be documented in this file.
 - Update .zshrc
 - Remove unecessary settings
 - Move zsh settings
-- 🤖 remove zsh's auto suggestion plugin
+- Remove zsh's auto suggestion plugin
 - Duti configuration
 - Update fonts
 - Change text
