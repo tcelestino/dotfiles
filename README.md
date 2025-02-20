@@ -1,12 +1,13 @@
-# Dotfiles
+# dotfiles
 
-This repository serves as the central hub for my personal configurations, settings, and customizations across various software applications. I primarily use `zsh` as my shell, but you can set up your own configurations for `bash` or any other shell.
+Hey! 👋
 
-I'm used to macOS and Ubuntu, so my configurations are tailored to these operating systems. However, you can easily adapt them to work on other systems as well.
+This repo stores my personal app configs and customizations. I mainly use zsh, but you can adapt for bash or other shells.
+Since I work with macOS and Ubuntu, configs are optimized for these OSs. But no worries - you can easily tweak them for other systems too!
 
 ## Usage
 
-Feel free to explore, adapt, and reuse any of my configurations in your own setup. You can clone this repository and replace my configurations with your own, making it easy to set up and maintain your personalized environment on any new system.
+This repo is 100% open for you to explore and customize. Just clone it and swap my configs with yours - makes it super easy to get your dev environment up and running on any new machine.
 
 ## Getting Started
 
