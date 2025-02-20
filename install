@@ -10,21 +10,33 @@ NC='\033[0m'
 # Get current location
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
+# Helper function to print info messages
 log() {
   echo -e "${GREEN}[INFO]${NC} $1"
 }
 
+# Helper function to print error messages in red and exit
 error() {
   echo -e "${RED}[ERROR]${NC} $1"
   exit 1
 }
 
-check_dependencies() {
-  command -v node >/dev/null 2>&1 || error "Node.js is required but not installed. https://nodejs.org/"
-  command -v brew >/dev/null 2>&1 || error "Homebrew is required but not installed. https://brew.sh/"
-  command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
+# Verify if required dependencies (Node.js, Homebrew, Git) are installed
+# check_dependencies() {
+#   command -v node >/dev/null 2>&1 || error "Node.js is required but not installed. https://nodejs.org/"
+#   command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
+# }
+
+# This is the default variable to set your information. You can override these values by exporting them in your shell.
+export_user_info() {
+  export USER_NAME="Your Name"
+  export USER_EMAIL="your.email@example.com"
+  export NPM_SCOPE="@your_username"
 }
 
+# Create a symbolic link, removing existing file/link if necessary
+# @param $1 Source file path
+# @param $2 Destination link path
 safe_link() {
   local src="$1"
   local dest="$2"
@@ -42,6 +54,9 @@ safe_link() {
   ln -s "$src" "$dest"
 }
 
+# Copy a directory, removing existing directory if necessary
+# @param $1 Source directory path
+# @param $2 Destination directory path
 safe_copy_dir() {
     local src="$1"
     local dest="$2"
@@ -61,6 +76,17 @@ safe_copy_dir() {
     fi
 }
 
+# Install Homebrew if not already installed
+install_brew() {
+  if ! command -v brew >/dev/null 2>&1; then
+    log "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  else
+    log "Homebrew is already installed."
+  fi
+}
+
+# Install Oh My Zsh if not already installed
 install_oh_my_zsh() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
       log "oh-my-zsh is already installed."
@@ -72,6 +98,7 @@ install_oh_my_zsh() {
   fi
 }
 
+# Install Deno runtime if not already installed
 install_deno() {
   if [ -d "$HOME/.deno/bin/deno" ]; then
     log "Deno is already installed.."
@@ -83,10 +110,14 @@ install_deno() {
   fi
 }
 
+# Configure Git settings by linking gitconfig file
 setup_git() {
   safe_link "$DIR/git/.gitconfig" "$HOME/.gitconfig"
+  safe_link "$DIR/git/.gitignore" "$HOME/.gitignore"
+  safe_link "$DIR/git/.gitattributes" "$HOME/.gitattributes"
 }
 
+# Configure Zsh settings by linking various configuration files
 setup_zsh() {
   safe_link "$DIR/zsh/.zshrc" "$HOME/.zshrc"
   safe_link "$DIR/zsh/themes/dracula.zsh-theme" "$HOME/.oh-my-zsh/themes/dracula.zsh-theme"
@@ -94,11 +125,14 @@ setup_zsh() {
   safe_link "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
 }
 
+# Install global NPM packages required for development
 install_global_npm_pkg() {
   log "Installing global npm packages..."
   npm install -g git-cz # https://github.com/streamich/git-cz
+  npm install -g n # https://github.com/tj/n
 }
 
+# Configure NPM settings and install global packages
 setup_npm() {
   safe_link "$DIR/.npmrc" "$HOME/.npmrc"
 
@@ -112,6 +146,7 @@ setup_npm() {
   install_global_npm_pkg
 }
 
+# Configure Homebrew and install packages from Brewfile
 setup_brew() {
   safe_link "$DIR/Brewfile" "$HOME/Brewfile"
   log "Executing brew bundle install..."
@@ -120,10 +155,7 @@ setup_brew() {
   fi
 }
 
-setup_duti() {
-  safe_link "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config"
-}
-
+# Install custom fonts based on the operating system
 setup_fonts() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
@@ -147,28 +179,30 @@ setup_fonts() {
   fi
 }
 
+# Configure macOS system settings if running on macOS
 setup_macos() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     log "Setting up macOS..."
     sh .macos
+    safe_link "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config" # Configure duti (macOS default application manager) settings
   fi
 }
 
 main() {
   log "Starting installation from $DIR..."
 
-  check_dependencies
+  export_user_info
 
+  install_brew
   install_oh_my_zsh
   install_deno
 
+  setup_brew
   setup_git
   setup_zsh
   setup_npm
-  setup_brew
-  setup_duti
-  setup_fonts
   setup_macos
+  setup_fonts
 
   log "Settings completed successfully! 🎉"
 }
