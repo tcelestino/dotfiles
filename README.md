@@ -60,7 +60,6 @@ feat: change that breaks compatibility
 
 BREAKING CHANGE: detailed description of the breaking change
 ```
-The CHANGELOG.md will be automatically updated after the PR is merged.
 
 ## License
 See in [LICENSE](LICENSE).
