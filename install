@@ -94,11 +94,7 @@ setup_zsh() {
   safe_link "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
 }
 
-npm_pkg() {
-  if ! command -v node >/dev/null 2>&1; then
-    error "Node.js is required but not installed. https://nodejs.org/"
-  fi
-
+install_global_npm_pkg() {
   log "Installing global npm packages..."
   npm install -g git-cz # https://github.com/streamich/git-cz
 }
@@ -113,7 +109,7 @@ setup_npm() {
     mkdir -p "$HOME/.npm-packages"
   fi
 
-  npm_pkg
+  install_global_npm_pkg
 }
 
 setup_brew() {
