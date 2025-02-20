@@ -31,14 +31,15 @@ cd ~/.dotfiles && chmod +x install
 ## Additional Configurations
 
 - To set the keyboard layout to include the 'ç' character on Ubuntu, follow the steps in the article "[Ajeitando o cedilha errado (ć) no Ubuntu Linux](https://www.danielkossmann.com/pt/ajeitando-cedilha-errado-ubuntu-linux/)"
+- Import the color scheme and other configurations into iTerm2. The settings can be found in the "iterm2" folder.
 
 ## Contributing
 
 If you have any suggestions, improvements, or bug fixes, feel free to open an issue or submit a pull request. I'm always looking for ways to improve my configurations and make them more efficient and user-friendly. Read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
-## Changelog
+### Changelog
 
-The CHANGELOG is automatically generated using GitHub Actions and git-cliff when a Pull Request is merged into the main branch. The process uses conventional commits to categorize changes:
+The CHANGELOG is automatically generated using GitHub Actions and git-cliff when a pull request is merged into the main branch. The process uses conventional commits to categorize changes:
 
 - 🚀 Features: `feat: feature description`
 - 🐛 Bug Fixes: `fix: bug fix description`
