@@ -1,79 +1,210 @@
-# get current location
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+#!/usr/bin/env bash
 
-echo "running from $DIR..."
+set -euo pipefail
 
-# **********************************
-# GIT
-#
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
 
-# remove ~/.gitconfig
-if [ -f ~/.gitconfig ]; then
-  echo "found old ~/.gitconfig - removing..."
-  rm ~/.gitconfig
-fi
+# Get current location
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-# link ~/.gitconfig
-echo "sym linking new ~/.gitconfig with $DIR/.gitconfig!\n"
-ln -s $DIR/git/.gitconfig ~/.gitconfig
-
-# *********************************
-# zsh
-#
-if [ -L ~/.zshrc ]; then
-  echo "found .zshrc - removing..."
-  rm ~/.zshrc
-fi
-
-echo $'linking .zshrc\n'
-ln -s $DIR/.zshrc ~/.zshrc
-
-if [ -L ~/.oh-my-zsh/themes/awesomepanda.zsh-theme ]; then
-  echo "found old awesomepanda.zsh-theme - removing..."
-  rm ~/.oh-my-zsh/themes/honukai.zsh-theme
-fi
-
-echo $'linking honukai zsh-theme\n'
-ln -s $DIR/iterm/awesomepanda.zsh-theme ~/.oh-my-zsh/themes/awesomepanda.zsh-theme
-
-if [ -L ~/.oh-my-zsh/custom/aliases.zsh ]; then
-  echo "found old aliases.zsh - removing..."
-  rm ~/.oh-my-zsh/custom/aliases.zsh
-fi
-
-# *************************************
-# npm
-#
-if [ -L ~/.npmrc ]; then
-  echo "found old .npmrc - removing..."
-  rm ~/.npmrc
-fi
-
-echo $'linking .npmrc\n'
-ln -s $DIR/.npmrc ~/.npmrc
-
-# *************************************
-# brew bundle install
-if [ -f ~/Brewfile ]; then
-  echo "found old Brewfile - removing..."
-  rm ~/Brewfile
-fi
-
-echo $'linking Brewfile\n'
-ln -s $DIR/Brewfile ~/Brewfile
-
-brew_install() {
-  echo "executing brew bundle install..."
-  brew bundle install
+# Helper function to print info messages
+log() {
+  echo -e "${GREEN}[INFO]${NC} $1"
 }
 
-brew_install
+# Helper function to print error messages in red and exit
+error() {
+  echo -e "${RED}[ERROR]${NC} $1"
+  exit 1
+}
 
-# duti configuration
-if [ -f ~/duti_picview.config ]; then
-  echo "found old ~/duti_picview.config - removing..."
-  rm ~/duti_picview.config
-fi
+# Verify if required dependencies (Node.js, Homebrew, Git) are installed
+# check_dependencies() {
+#   command -v node >/dev/null 2>&1 || error "Node.js is required but not installed. https://nodejs.org/"
+#   command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
+# }
 
-echo $'linking duti config\n'
-ln -s $DIR/duti_picview.config ~/duti_picview.config
+# This is the default variable to set your information. You can override these values by exporting them in your shell.
+export_user_info() {
+  export USER_NAME="Your Name"
+  export USER_EMAIL="your.email@example.com"
+  export NPM_SCOPE="@your_username"
+}
+
+# Create a symbolic link, removing existing file/link if necessary
+# @param $1 Source file path
+# @param $2 Destination link path
+safe_link() {
+  local src="$1"
+  local dest="$2"
+
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+      log "Found $dest - removing..."
+      rm -f "$dest"
+  fi
+
+  if [ ! -e "$src" ]; then
+      error "Source file $src does not exist!"
+  fi
+
+  log "Linking $dest to $src"
+  ln -s "$src" "$dest"
+}
+
+# Copy a directory, removing existing directory if necessary
+# @param $1 Source directory path
+# @param $2 Destination directory path
+safe_copy_dir() {
+    local src="$1"
+    local dest="$2"
+
+    if [ ! -d "$src" ]; then
+        error "Source directory $src does not exist!"
+    fi
+
+    if [ -d "$dest" ]; then
+        log "Found $dest - removing..."
+        rm -rf "$dest"
+    fi
+
+    log "Copying directory $src to $dest"
+    if ! cp -R "$src" "$dest"; then
+        error "Failed to copy directory $src to $dest"
+    fi
+}
+
+# Install Homebrew if not already installed
+install_brew() {
+  if ! command -v brew >/dev/null 2>&1; then
+    log "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  else
+    log "Homebrew is already installed."
+  fi
+}
+
+# Install Oh My Zsh if not already installed
+install_oh_my_zsh() {
+  if [ -d "$HOME/.oh-my-zsh" ]; then
+      log "oh-my-zsh is already installed."
+  else
+      log "Installing oh-my-zsh..."
+      if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
+          error "Failed to install oh-my-zsh"
+      fi
+  fi
+}
+
+# Install Deno runtime if not already installed
+install_deno() {
+  if [ -d "$HOME/.deno/bin/deno" ]; then
+    log "Deno is already installed.."
+  else
+    log "Installing Deno"
+    if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
+      error "Failed to install Deno"
+    fi
+  fi
+}
+
+# Configure Git settings by linking gitconfig file
+setup_git() {
+  safe_link "$DIR/git/.gitconfig" "$HOME/.gitconfig"
+  safe_link "$DIR/git/.gitignore" "$HOME/.gitignore"
+  safe_link "$DIR/git/.gitattributes" "$HOME/.gitattributes"
+}
+
+# Configure Zsh settings by linking various configuration files
+setup_zsh() {
+  safe_link "$DIR/zsh/.zshrc" "$HOME/.zshrc"
+  safe_link "$DIR/zsh/themes/dracula.zsh-theme" "$HOME/.oh-my-zsh/themes/dracula.zsh-theme"
+  safe_link "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+  safe_link "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
+}
+
+# Install global NPM packages required for development
+install_global_npm_pkg() {
+  log "Installing global npm packages..."
+  npm install -g git-cz # https://github.com/streamich/git-cz
+  npm install -g n # https://github.com/tj/n
+}
+
+# Configure NPM settings and install global packages
+setup_npm() {
+  safe_link "$DIR/.npmrc" "$HOME/.npmrc"
+
+  # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
+  if [ -d "$HOME/.npm-packages" ]; then
+    log ".npm-packages folder exists"
+  else
+    mkdir -p "$HOME/.npm-packages"
+  fi
+
+  install_global_npm_pkg
+}
+
+# Configure Homebrew and install packages from Brewfile
+setup_brew() {
+  safe_link "$DIR/Brewfile" "$HOME/Brewfile"
+  log "Executing brew bundle install..."
+  if ! brew bundle install; then
+      error "Brew bundle install failed"
+  fi
+}
+
+# Install custom fonts based on the operating system
+setup_fonts() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    local font_dir="$HOME/Library/Fonts"
+    if [ ! -d "$font_dir" ]; then
+      mkdir -p "$font_dir"
+    fi
+    log "Installing fonts for macOS..."
+    cp "$DIR/fonts/"* "$font_dir/"
+  elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Ubuntu/Linux
+    local font_dir="$HOME/.local/share/fonts"
+    if [ ! -d "$font_dir" ]; then
+      mkdir -p "$font_dir"
+    fi
+    log "Installing fonts for Linux..."
+    cp "$DIR/fonts/"* "$font_dir/"
+    fc-cache -f -v
+  else
+    error "Unsupported operating system"
+  fi
+}
+
+# Configure macOS system settings if running on macOS
+setup_macos() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    log "Setting up macOS..."
+    sh .macos
+    safe_link "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config" # Configure duti (macOS default application manager) settings
+  fi
+}
+
+main() {
+  log "Starting installation from $DIR..."
+
+  export_user_info
+
+  install_brew
+  install_oh_my_zsh
+  install_deno
+
+  setup_brew
+  setup_git
+  setup_zsh
+  setup_npm
+  setup_macos
+  setup_fonts
+
+  log "Settings completed successfully! 🎉"
+}
+
+main "$@"

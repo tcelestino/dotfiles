@@ -1,7 +1,7 @@
 # oh-my-zsh
 alias zshconfig="$EDITOR ~/.zshrc"
 alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
-alias reload="source ~/.zshrc"
+alias reload="omz reload" # reload oh-my-zsh
 
 # development
 alias server="python -m SimpleHTTPServer"
@@ -23,58 +23,41 @@ alias npm-run='npm run'
 alias npm-reset='rm -rf node_modules && rm -f package-lock.json && npm install && npx node-notifier-cli -t "Done" -m "npm modules reinstalled" -s Glass -i https://cdn.rawgit.com/npm/logos/31945b5c/npm%20square/n-64.png'
 alias npm-ri='rm -rf node_modules && npm i'
 
-# npx
-alias commit="npx git-cz"
-alias react_app="npx create-react-app"
+# git
+alias commit="git-cz --disable-emoji"
 
 # mac
-alias hd="cd /Volumes/HD"
-alias work="cd /Volumes/HD/Workspace"
-alias learn="cd /Volumes/HD/Learning"
+# alias hd="cd /Volumes/HD"
 alias shutdown="sudo shutdown -h now"
 alias hosts="sudo $EDITOR /etc/hosts"
 alias dns_clear="dscacheutil -flushcache"
 
 # directory
 alias downloads='cd ~/Downloads/'
+alias projects='cd ~/Projects/'
 
 # mv, rm, cp
 alias mv='mv -v'
 alias rm='rm -i -v'
 alias cp='cp -v'
-alias md="mkdir"
 alias rd="rmdir"
 alias del="rm -i"
 
-# Easier navigation: .., ..., ~ and -
 alias cl="clear"
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
-# git
-clone() {
-  git clone $1
-  cd $(basename ${1%.*})
-  if test -f "./package.json"; then
-    echo "..."
-    echo "Found package.json... installing dependencies"
-    echo "..."
-    npm install
-  fi
-}
-
 # docker
-alias dockercleand='docker rmi $(docker images -q)' #delete all images
+alias dockercleand='docker rmi $(docker images -q)' # delete all images
 alias dockercleanu='docker rmi $(docker images -q -f dangling=true)' # delete all untagged images
-alias dockercleans='docker rm $(docker ps -a -q)' #delete all stopped images
-alias dockerstop='docker stop $(docker ps -aq)' #stop all container
+alias dockercleans='docker rm $(docker ps -a -q)' # delete all stopped images
+alias dockerstop='docker stop $(docker ps -aq)' # stop all container
 alias dcu='docker-compose up' #start with docker-composer
+alias docker_hostclean='export DOCKER_HOST=' # clean DOCKER_HOST
 
-# others
 alias fs="stat -f \"%z bytes\""
 alias chmox='chmod -x'
 alias where=which
+alias killnode="killall -9 node"
+
+alias checkport=checkPort # use my zsh custom plugin
+alias killport=killPort # use my zsh custom plugin
