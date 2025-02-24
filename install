@@ -27,13 +27,6 @@ error() {
 #   command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
 # }
 
-# This is the default variable to set your information. You can override these values by exporting them in your shell.
-export_user_info() {
-  export USER_NAME="Your Name"
-  export USER_EMAIL="your.email@example.com"
-  export NPM_SCOPE="@your_username"
-}
-
 # Create a symbolic link, removing existing file/link if necessary
 # @param $1 Source file path
 # @param $2 Destination link path
@@ -164,7 +157,7 @@ setup_fonts() {
       mkdir -p "$font_dir"
     fi
     log "Installing fonts for macOS..."
-    cp "$DIR/fonts/"* "$font_dir/"
+    cp "$DIR/extras/fonts/"* "$font_dir/"
   elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # Ubuntu/Linux
     local font_dir="$HOME/.local/share/fonts"
@@ -172,7 +165,7 @@ setup_fonts() {
       mkdir -p "$font_dir"
     fi
     log "Installing fonts for Linux..."
-    cp "$DIR/fonts/"* "$font_dir/"
+    cp "$DIR/extras/fonts/"* "$font_dir/"
     fc-cache -f -v
   else
     error "Unsupported operating system"
@@ -191,15 +184,13 @@ setup_macos() {
 main() {
   log "Starting installation from $DIR..."
 
-  export_user_info
-
-  install_brew
   install_oh_my_zsh
+  install_brew
   install_deno
 
+  setup_zsh
   setup_brew
   setup_git
-  setup_zsh
   setup_npm
   setup_macos
   setup_fonts
