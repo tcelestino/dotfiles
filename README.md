@@ -14,7 +14,7 @@ This repo is 100% open for you to explore and customize. Just clone it and swap 
 1. Clone this repository to your local machine:
 
 ```bash
-git clone https://github.com/tcelestino/dotfiles.git ~/.dotfiles
+git clone git@github.com:tcelestino/dotfiles.git
 ```
 
 2. Set run file to install
@@ -22,12 +22,15 @@ git clone https://github.com/tcelestino/dotfiles.git ~/.dotfiles
 ```bash
 cd ~/.dotfiles && chmod +x install
 ```
+3. Open `.zshrc` file and change variables "USER_NAME", "USER_EMAIL" and "NPM_SCOPE". You might set `GH_TOKEN` and `NPM_TOKEN` too.
 
-3. Install
+```bash
+4. Install
 
 ```bash
 ./install
 ```
+⚠️ **Don't forget set values `GH_TOKEN` and `NPM_TOKEN`!!**
 
 ## Additional Configurations
 
@@ -39,27 +42,6 @@ cd ~/.dotfiles && chmod +x install
 If you have any suggestions, improvements, or bug fixes, feel free to open an issue or submit a pull request. I'm always looking for ways to improve my configurations and make them more efficient and user-friendly. Read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
 This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. Please use it when making changes to the codebase.
-
-- 🚀 Features: `feat: feature description`
-- 🐛 Bug Fixes: `fix: bug fix description`
-- 📝 Documentation: `docs: description of the change`
-- ⚡️ Performance: `perf: description of the improvement`
-- ♻️ Refactoring: `refactor: description of the change`
-- 🎨 Style: `style: description of the change`
-- ✅ Tests: `test: description of the test`
-- 📦 Dependencies: `chore(deps): description of the update`
-- 🛠 Chores: `chore: description of the task`
-
-For breaking changes, add `!` after the type or include `BREAKING CHANGE:` in the commit body:
-```bash
-# Using ! after the type
-feat!: change that breaks compatibility
-
-# Or using BREAKING CHANGE in the body
-feat: change that breaks compatibility
-
-BREAKING CHANGE: detailed description of the breaking change
-```
 
 ## License
 See in [LICENSE](LICENSE).
