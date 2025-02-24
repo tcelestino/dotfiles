@@ -17,25 +17,26 @@ This repo is 100% open for you to explore and customize. Just clone it and swap 
 git clone git@github.com:tcelestino/dotfiles.git
 ```
 
-2. Set run file to install
+2. Open folder `dotfiles` and set run file to install
 
 ```bash
-cd ~/.dotfiles && chmod +x install
+chmod +x install
 ```
 3. Open `.zshrc` file and change variables "USER_NAME", "USER_EMAIL" and "NPM_SCOPE". You might set `GH_TOKEN` and `NPM_TOKEN` too.
 
 ```bash
-4. Install
+
+4. Run the install script
 
 ```bash
 ./install
 ```
-⚠️ **Don't forget set values `GH_TOKEN` and `NPM_TOKEN`!!**
+⚠️ **Don't forget to set values `GH_TOKEN` and `NPM_TOKEN`!!**
 
 ## Additional Configurations
 
 - To set the keyboard layout to include the 'ç' character on Ubuntu, follow the steps in the article "[Ajeitando o cedilha errado (ć) no Ubuntu Linux](https://www.danielkossmann.com/pt/ajeitando-cedilha-errado-ubuntu-linux/)"
-- Import the color scheme and other configurations into iTerm2. The settings can be found in the "iterm2" folder.
+- If you use iTerm2, you might import the color scheme and other configurations into iTerm2. The settings can be found in the "iterm2" folder.
 
 ## Contributing
 
