@@ -51,3 +51,19 @@ function checkPort {
 function killPort {
   kill -9 (lsof -t -i:$argv[1])
 }
+
+# log process
+function logprocess() {
+  if [ -z "$1" ]; then
+    echo "Usage: logprocess processName"
+    return 1
+  fi
+
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    log stream --predicate "process == \"$1\""
+  else
+    # Linux
+    journalctl -f -u "$1" 2>/dev/null || tail -f /var/log/syslog | grep "$1"
+  fi
+}
