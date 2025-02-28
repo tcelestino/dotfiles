@@ -61,3 +61,4 @@ alias killnode="killall -9 node"
 
 alias checkport=checkPort # use my zsh custom plugin
 alias killport=killPort # use my zsh custom plugin
+alias what_shell=ps -p $$ -o pid,comm= # show current shell
