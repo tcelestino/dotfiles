@@ -26,9 +26,6 @@ sudo nvram SystemAudioVolume=" "
 # disbale transparency menu bar
 defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
 
-# disbale transparency menu bar yosemite
-defaults write com.apple.universalaccess reduceTransparency -bool true
-
 # Disable the you sure you want to open this application dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
@@ -88,6 +85,9 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
 # Disable smart dashes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+# Set date display in menu bar
+defaults write com.apple.menuextra.clock "DateFormat" "d MMM EEE H.mm"
 
 # SSD-specific tweaks                                                         #
 ###############################################################################
@@ -306,6 +306,9 @@ defaults write com.apple.dock autohide -bool true
 # Don't make Dock icons of hidden applications translucent
 defaults write com.apple.dock showhidden -bool false
 
+# Hide 'recent applications' from dock
+defaults write com.apple.dock show-recents -bool false
+
 # Reset Launchpad, but keep the desktop wallpaper intact
 find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete
 
@@ -397,6 +400,9 @@ sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search
 # been indexed before.
 # Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
 sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+
+# Disable CMD+space for spotlight
+/usr/libexec/PlistBuddy ~/Library/Preferences/com.apple.symbolichotkeys.plist -c "Set AppleSymbolicHotKeys:64:enabled false"
 
 # Time Machine                                                                #
 ###############################################################################
