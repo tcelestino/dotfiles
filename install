@@ -123,6 +123,7 @@ install_global_npm_pkg() {
   log "Installing global npm packages..."
   npm install -g git-cz # https://github.com/streamich/git-cz
   npm install -g n # https://github.com/tj/n
+  npm install -g fastify-cli #https://fastify.dev/
 }
 
 # Configure NPM settings and install global packages
