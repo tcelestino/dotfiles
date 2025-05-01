@@ -52,6 +52,11 @@ alias dockercleanu='docker rmi $(docker images -q -f dangling=true)' # delete al
 alias dockercleans='docker rm $(docker ps -a -q)' # delete all stopped images
 alias dockerstop='docker stop $(docker ps -aq)' # stop all container
 alias dcu='docker-compose up' #start with docker-composer
+alias dcd='docker-compose down' #stop with docker-composer
+alias dcr='docker-compose restart' #restart with docker-composer
+alias dcb='docker-compose build' #build with docker-composer
+alias dcl='docker-compose logs' #logs with docker-composer
+alias dcp='docker-compose -f docker-compose.dependencies.yaml up -d' #start dependencies with docker-composer
 alias docker_hostclean='export DOCKER_HOST=' # clean DOCKER_HOST
 
 alias fs="stat -f \"%z bytes\""
