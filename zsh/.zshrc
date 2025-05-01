@@ -6,7 +6,7 @@ plugins=(alias-finder brew copypath copyfile deno dotenv docker docker-compose e
 
 
 # global
-export JAVA_HOME="$(/usr/libexec/java_home -v 1.$JAVA_VERSION)"
+#export JAVA_HOME="$(/usr/libexec/java_home -v 1.$JAVA_VERSION)" # enable this if you are using java
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH=/usr/share/maven/bin:$PATH
 export PATH=$HOME/local/bin:$PATH
