@@ -3,7 +3,7 @@ alias zshconfig="$EDITOR ~/.zshrc"
 alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
 alias reload="omz reload" # reload oh-my-zsh
 
-# development
+# local web server
 alias server="python -m SimpleHTTPServer"
 alias serveo="ssh -R 80:localhost:3000 serveo.net"
 
@@ -25,9 +25,9 @@ alias npm-ri='rm -rf node_modules && npm i'
 
 # git
 alias commit="git-cz --disable-emoji"
+alias commitall="git add . && git-cz --disable-emoji"
 
 # mac
-# alias hd="cd /Volumes/HD"
 alias shutdown="sudo shutdown -h now"
 alias hosts="sudo $EDITOR /etc/hosts"
 alias dns_clear="dscacheutil -flushcache"
@@ -35,6 +35,7 @@ alias dns_clear="dscacheutil -flushcache"
 # directory
 alias downloads='cd ~/Downloads/'
 alias projects='cd ~/Projects/'
+alias work='cd ~/work'
 
 # mv, rm, cp
 alias mv='mv -v'
