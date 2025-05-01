@@ -27,7 +27,7 @@ error() {
 #   command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
 # }
 
-# Create a symbolic link, removing existing file/link if necessary
+# Create a symbolic link
 # @param $1 Source file path
 # @param $2 Destination link path
 safe_link() {
@@ -47,10 +47,10 @@ safe_link() {
   ln -s "$src" "$dest"
 }
 
-# Copy a directory, removing existing directory if necessary
+# Copy a directory
 # @param $1 Source directory path
 # @param $2 Destination directory path
-safe_copy_dir() {
+copy_dir() {
     local src="$1"
     local dest="$2"
 
@@ -59,14 +59,36 @@ safe_copy_dir() {
     fi
 
     if [ -d "$dest" ]; then
-        log "Found $dest - removing..."
-        rm -rf "$dest"
+        log "Found $dest - renaming..."
+        mv "$dest" "$dest.old"
     fi
 
     log "Copying directory $src to $dest"
     if ! cp -R "$src" "$dest"; then
         error "Failed to copy directory $src to $dest"
     fi
+}
+
+# Copy a file
+# @param $1 Source file path
+# @param $2 Destination file path
+copy_file() {
+  local src="$1"
+  local dest="$2"
+
+  if [ ! -f "$src" ]; then
+    error "Source file $src does not exist!"
+  fi
+
+  if [ -f "$dest" ]; then
+    log "Found $dest - renaming..."
+    mv "$dest" "$dest.old"
+  fi
+
+  log "Copying file $src to $dest"
+  if ! cp "$src" "$dest"; then
+    error "Failed to copy file $src to $dest"
+  fi
 }
 
 # Install Homebrew if not already installed
@@ -105,17 +127,17 @@ install_deno() {
 
 # Configure Git settings by linking gitconfig file
 setup_git() {
-  safe_link "$DIR/git/.gitconfig" "$HOME/.gitconfig"
-  safe_link "$DIR/git/.gitignore" "$HOME/.gitignore"
-  safe_link "$DIR/git/.gitattributes" "$HOME/.gitattributes"
+  copy_file "$DIR/git/.gitconfig" "$HOME/.gitconfig"
+  copy_file "$DIR/git/.gitignore" "$HOME/.gitignore"
+  copy_file "$DIR/git/.gitattributes" "$HOME/.gitattributes"
 }
 
 # Configure Zsh settings by linking various configuration files
 setup_zsh() {
-  safe_link "$DIR/zsh/.zshrc" "$HOME/.zshrc"
-  safe_link "$DIR/zsh/themes/dracula.zsh-theme" "$HOME/.oh-my-zsh/themes/dracula.zsh-theme"
-  safe_link "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
-  safe_link "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
+  copy_file "$DIR/zsh/.zshrc" "$HOME/.zshrc"
+  copy_dir "$DIR/zsh/themes" "$HOME/.oh-my-zsh/themes"
+  copy_file "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+  copy_dir "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
 }
 
 # Install global NPM packages required for development
@@ -128,7 +150,7 @@ install_global_npm_pkg() {
 
 # Configure NPM settings and install global packages
 setup_npm() {
-  safe_link "$DIR/.npmrc" "$HOME/.npmrc"
+  copy_file "$DIR/.npmrc" "$HOME/.npmrc"
 
   # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
   if [ -d "$HOME/.npm-packages" ]; then
@@ -142,7 +164,7 @@ setup_npm() {
 
 # Configure Homebrew and install packages from Brewfile
 setup_brew() {
-  safe_link "$DIR/Brewfile" "$HOME/Brewfile"
+  copy_file "$DIR/Brewfile" "$HOME/Brewfile"
   log "Executing brew bundle install..."
   if ! brew bundle install; then
       error "Brew bundle install failed"
@@ -178,7 +200,7 @@ setup_macos() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     log "Setting up macOS..."
     sh .macos
-    safe_link "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config" # Configure duti (macOS default application manager) settings
+    copy_file "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config" # Configure duti (macOS default application manager) settings
   fi
 }
 
