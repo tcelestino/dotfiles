@@ -67,3 +67,18 @@ function logprocess() {
     journalctl -f -u "$1" 2>/dev/null || tail -f /var/log/syslog | grep "$1"
   fi
 }
+
+# open work folder
+function open_work_folder() {
+  if [ -d ~/Projects ]; then
+    cd ~/Projects
+  elif [ -d ~/projects ]; then
+    cd ~/projects
+  elif [ -d ~/work ]; then
+    cd ~/work
+  elif [ -d ~/Work ]; then
+    cd ~/Work
+  else
+    echo "Folder ~/Projects, ~/projects, ~/work or ~/Work does not exist"
+  fi
+}
