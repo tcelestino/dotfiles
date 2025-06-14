@@ -1,20 +1,17 @@
-# This is Git's per-user configuration file.
-
 [user]
-  name = "<YOUR-NAME-HERE>"
-  email = "<YOUR-EMAIL-HERE>"
+  name = "<YOUR_NAME>"
+  email = "<YOUR_EMAIL>"
 
 [mergetool]
   keepBackup = true
 
 [core]
-  editor = vim
+  editor = $EDITOR
   excludesfile = ~/.gitignore
   attributesfile = ~/.gitattributes
 
 [init]
   defaultBranch = main
-
 
 [alias]
   ci = commit
@@ -33,10 +30,10 @@
   fu  = fetch origin
   pum = pull origin master
   pumn = pull origin main
-  pud = pull origin dev
+  pud = pull origin develop
   fupum = !git co master && git fu && git pum
   fupumn = !git co main && git fu && git pumn
-  fupud = !git co dev && git fu && git pud
+  fupud = !git co develop && git fu && git pud
   rb = "!f() { \
       branch=\"$(git branch 2>/dev/null | grep \\* | awk '{ print $2 }')\" && \
       if git rev-parse --verify master >/dev/null 2>&1; then \
