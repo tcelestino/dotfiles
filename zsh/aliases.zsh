@@ -1,8 +1,8 @@
 # oh-my-zsh
 alias zshconfig="$EDITOR ~/.zshrc"
 alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
-alias reload="omz reload" # reload oh-my-zsh
-alias zsh-alias="$EDITOR ~/.oh-my-zsh/custom/aliases.zsh"
+alias reload="omz reload"
+alias custom-alias="$EDITOR ~/.oh-my-zsh/custom/aliases.zsh"
 
 # local development
 alias server="python -m SimpleHTTPServer"
