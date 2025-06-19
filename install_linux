@@ -227,6 +227,37 @@ setup_fonts() {
   log "Fonts installed successfully!"
 }
 
+# Install Yaak via deb package
+install_yaak() {
+  local yaak_url="https://github.com/mountain-loop/yaak/releases/download/v2025.4.0/yaak_2025.4.0_amd64.deb" #latest version at 2025.06.19
+
+  if [ ! -d "/tmp" ]; then
+    mkdir -p "/tmp"
+  fi
+
+  local tmp_folder="/tmp"
+  local tmp_file="$tmp_folder/yaak-x86_64.deb"
+
+  log "Downloading Yaak..."
+  if ! curl -L "$yaak_url" -o "$tmp_folder"; then
+    error "Failed to download Yaak."
+  fi
+
+  log "Installing Yaak..."
+  if ! sudo dpkg -i "$tmp_file"; then
+    error "Failed to install Yaak."
+  fi
+
+
+  log "Removing temporary files..."
+  rm -rf "$tmp_folder"
+  log "Temporary files removed."
+
+  register_completed_step "Yaak"
+  log "Yaak installed successfully! Execute 'yaak' to open."
+
+}
+
 ask_continue() {
   local message="$1"
   local step="$2"
@@ -269,6 +300,7 @@ main() {
   echo "8. Configure NPM"
   echo "9. Install global NPM packages"
   echo "10. Configure the fonts"
+  echo "11. Install Yaak (optional)"
 
   ask_continue "Do you want to start the installation?" "0" || exit 0
 
@@ -304,12 +336,16 @@ main() {
     setup_npm
   fi
 
-  if ask_continue "Install global NPM packages (git-cz, n, fastify-cli, npm-check-updates)" "9"; then
+  if ask_continue "Install global some NPM packages" "9"; then
     install_pkg_global
   fi
 
   if ask_continue "Configure the fonts" "10"; then
     setup_fonts
+  fi
+
+  if ask_continue "Install Yaak (HTTP Client GUI)?" "11"; then
+    install_yaak
   fi
 
   log "Configurations completed successfully! 🎉"
