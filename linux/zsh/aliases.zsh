@@ -5,7 +5,7 @@ alias reload="omz reload"
 alias custom-alias="$EDITOR ~/.oh-my-zsh/custom/aliases.zsh"
 
 # local development
-alias server="python -m SimpleHTTPServer"
+alias server="python3 -m http.server"
 alias serveo="ssh -R 80:localhost:3000 serveo.net"
 
 # https://paulbrowne.xyz/https-localhost
@@ -55,7 +55,7 @@ alias dcl='docker-compose logs' #logs with docker-composer
 alias dcp='docker-compose -f docker-compose.dependencies.yaml up -d' #start dependencies with docker-composer
 
 # utils
-alias fs="stat -f \"%z bytes\""
+alias fs='stat -c "%s bytes"'
 alias chmox='chmod -x'
 alias where=which
 alias killnode="killall -9 node"

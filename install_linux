@@ -112,13 +112,11 @@ install_oh_my_zsh() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
     log "Oh My Zsh is already installed."
     register_completed_step "Oh My Zsh (already installed)"
-    return 0
   fi
 
   log "Installing Oh My Zsh..."
   if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
     error "Failed to install Oh My Zsh"
-    return 1
   fi
 
   register_completed_step "Oh My Zsh"
@@ -130,7 +128,6 @@ install_node_using_n() {
   if [ -d "$HOME/local/n/versions/node" ]; then
     log "Node.js is already installed."
     register_completed_step "Node.js (already installed)"
-    return 0
   else
     log "Installing Node.js..."
     if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-install | bash -s 22)"; then
@@ -143,10 +140,9 @@ install_node_using_n() {
 
 # Install Deno runtime
 install_deno() {
-  if [ -d "$HOME/.deno/bin/deno" ]; then
+  if [ -f "$HOME/.deno/bin/deno" ] || command -v deno >/dev/null 2>&1; then
     log "Deno is already installed.."
     register_completed_step "Deno (already installed)"
-    return 0
   else
     log "Installing Deno"
     if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
@@ -190,7 +186,7 @@ setup_brew() {
 # Install global NPM packages
 install_pkg_global() {
   log "Installing global npm packages..."
-  npm install -g git-cz n fastify-cli npm-check-updates
+  npm install -g git-cz fastify-cli npm-check-updates node-notifier-cli
   register_completed_step "NPM packages"
   log "NPM packages installed successfully!"
 }
@@ -211,18 +207,16 @@ setup_npm() {
 
 # Custom fonts
 setup_fonts() {
-    local font_dir="$HOME/.local/share/fonts"
-    if [ ! -d "$font_dir" ]; then
-      mkdir -p "$font_dir"
-    fi
-    log "Installing fonts for Linux..."
-    cp "$DIR/extras/fonts/"* "$font_dir/"
-    fc-cache -f -v
-    register_completed_step "Fonts"
-    log "Fonts installed successfully!"
-  else
-    error "Error installing fonts"
+  local font_dir="$HOME/.local/share/fonts"
+  if [ ! -d "$font_dir" ]; then
+    mkdir -p "$font_dir"
   fi
+  copy_dir "$DIR/extras/fonts" "$font_dir"
+  log "Installing fonts for Linux..."
+  fc-cache -f -v
+
+  register_completed_step "Fonts"
+  log "Fonts installed successfully!"
 }
 
 ask_continue() {
