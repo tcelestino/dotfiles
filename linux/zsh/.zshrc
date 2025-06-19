@@ -16,19 +16,19 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 #export PATH=$PATH:~/.composer/vendor/bin # enable this if you are using composer
 
 # github
-export GH_TOKEN="<YOUR GITHUB TOKEN>" # create token at https://github.com/settings/apps select "Personal access tokens"
+export GH_TOKEN="" # create token at https://github.com/settings/apps select "Personal access tokens"
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/id_ed25519"
 
 # node and npm
 export NODE_ENV="development"
-export NPM_TOKEN="<YOUR NPM TOKEN>"
-export NPM_SCOPE="<YOUR_USERNAME>" # e.g. tcelestino
+export NPM_TOKEN="" # create token at https://www.npmjs.com/settings/tokens
+export NPM_SCOPE="" # e.g. tcelestino
 
 # local
-export USER_NAME="<YOUR_NAME>"
-export USER_EMAIL="<YOUR_EMAIL>"
+export USER_NAME="" # e.g. tcelestino
+export USER_EMAIL="" # e.g. your.email@provider.com
 
 # preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then

@@ -119,6 +119,7 @@ install_oh_my_zsh() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
     log "Oh My Zsh is already installed."
     register_completed_step "Oh My Zsh (already installed)"
+    return
   fi
 
   log "Installing Oh My Zsh..."
@@ -135,6 +136,7 @@ install_node_using_n() {
   if [ -d "$HOME/local/n/versions/node" ]; then
     log "Node.js is already installed."
     register_completed_step "Node.js (already installed)"
+    return
   else
     log "Installing Node.js..."
     if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-install | bash -s 22)"; then
@@ -150,6 +152,7 @@ install_deno() {
   if [ -f "$HOME/.deno/bin/deno" ] || command -v deno >/dev/null 2>&1; then
     log "Deno is already installed.."
     register_completed_step "Deno (already installed)"
+    return
   else
     log "Installing Deno"
     if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
@@ -158,6 +161,44 @@ install_deno() {
     register_completed_step "Deno"
     log "Deno installed successfully!"
   fi
+}
+
+# Install global NPM packages
+install_pkg_global() {
+  log "Installing global npm packages..."
+  npm install -g git-cz fastify-cli npm-check-updates node-notifier-cli
+  register_completed_step "NPM packages"
+  log "NPM packages installed successfully!"
+}
+
+# Install Yaak via deb package
+install_yaak() {
+  local yaak_url="https://github.com/mountain-loop/yaak/releases/download/v2025.4.0/yaak_2025.4.0_amd64.deb" #latest version at 2025.06.19
+
+  if [ ! -d "/tmp" ]; then
+    mkdir -p "/tmp"
+  fi
+
+  local tmp_folder="/tmp"
+  local tmp_file="$tmp_folder/yaak-x86_64.deb"
+
+  log "Downloading Yaak..."
+  if ! curl -L "$yaak_url" -o "$tmp_file"; then
+    error "Failed to download Yaak."
+  fi
+
+  log "Installing Yaak..."
+  if ! sudo dpkg -i "$tmp_file"; then
+    error "Failed to install Yaak."
+  fi
+
+
+  log "Removing temporary files..."
+  rm -f "$tmp_file"
+  log "Temporary files removed."
+
+  register_completed_step "Yaak"
+  log "Yaak installed successfully!"
 }
 
 # Configure Git settings
@@ -174,8 +215,9 @@ setup_git() {
 setup_zsh() {
   copy_file "$DIR/linux/zsh/.zshrc" "$HOME/.zshrc"
   copy_dir "$DIR/zsh/themes" "$HOME/.oh-my-zsh/themes"
-  copy_file "$DIR/linux/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh" # TODO: use aliases.zsh on macos too
+  copy_file "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
   copy_dir "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
+
   register_completed_step "Zsh"
   log "Zsh configured successfully!"
 }
@@ -191,14 +233,6 @@ setup_brew() {
   log "Homebrew configured successfully!"
 }
 
-# Install global NPM packages
-install_pkg_global() {
-  log "Installing global npm packages..."
-  npm install -g git-cz fastify-cli npm-check-updates node-notifier-cli
-  register_completed_step "NPM packages"
-  log "NPM packages installed successfully!"
-}
-
 # Configure NPM settings and install global packages
 setup_npm() {
   copy_file "$DIR/.npmrc" "$HOME/.npmrc"
@@ -208,6 +242,7 @@ setup_npm() {
   # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
   if [ -d "$HOME/.npm-packages" ]; then
     log ".npm-packages folder exists"
+    return
   else
     mkdir -p "$HOME/.npm-packages"
   fi
@@ -225,37 +260,6 @@ setup_fonts() {
 
   register_completed_step "Fonts"
   log "Fonts installed successfully!"
-}
-
-# Install Yaak via deb package
-install_yaak() {
-  local yaak_url="https://github.com/mountain-loop/yaak/releases/download/v2025.4.0/yaak_2025.4.0_amd64.deb" #latest version at 2025.06.19
-
-  if [ ! -d "/tmp" ]; then
-    mkdir -p "/tmp"
-  fi
-
-  local tmp_folder="/tmp"
-  local tmp_file="$tmp_folder/yaak-x86_64.deb"
-
-  log "Downloading Yaak..."
-  if ! curl -L "$yaak_url" -o "$tmp_folder"; then
-    error "Failed to download Yaak."
-  fi
-
-  log "Installing Yaak..."
-  if ! sudo dpkg -i "$tmp_file"; then
-    error "Failed to install Yaak."
-  fi
-
-
-  log "Removing temporary files..."
-  rm -rf "$tmp_folder"
-  log "Temporary files removed."
-
-  register_completed_step "Yaak"
-  log "Yaak installed successfully! Execute 'yaak' to open."
-
 }
 
 ask_continue() {

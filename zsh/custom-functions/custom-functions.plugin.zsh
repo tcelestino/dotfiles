@@ -69,7 +69,7 @@ function logprocess() {
 }
 
 # open work folder
-function open_work_folder() {
+function workFolder() {
   if [ -d ~/Projects ]; then
     cd ~/Projects
   elif [ -d ~/projects ]; then
