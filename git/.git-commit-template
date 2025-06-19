@@ -1,0 +1,17 @@
+# Title (maximum 50 characters)
+#
+# Briefly and imperatively describe the change made
+
+# Blank line
+
+# Message body (maximum 72 characters per line)
+#
+# Explain what and why, not just how. If necessary, provide context,
+# motivations, and the impact of the change. Use as many lines as needed.
+
+# Blank line
+
+# Footer (optional)
+#
+# Reference issues, pull requests, or breaking changes, if applicable.
+# Example: Closes #123, Related to #456

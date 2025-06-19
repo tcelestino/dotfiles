@@ -165,6 +165,7 @@ setup_git() {
   copy_file "$DIR/git/.gitconfig" "$HOME/.gitconfig"
   copy_file "$DIR/git/.gitignore" "$HOME/.gitignore"
   copy_file "$DIR/git/.gitattributes" "$HOME/.gitattributes"
+  copy_file "$DIR/git/.git-commit-template" "$HOME/.git-commit-template"
   register_completed_step "Git"
   log "Git configured successfully!"
 }
