@@ -43,4 +43,10 @@ ZSH_WEB_SEARCH_ENGINES=(
   linkedin "https://www.linkedin.com/search/results/all/?keywords="
 )
 
+# deno settings
+. "$HOME/.deno/env"
+
+# homebrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 source $ZSH/oh-my-zsh.sh
