@@ -114,8 +114,27 @@ install_brew() {
   log "Homebrew installed successfully!"
 }
 
+# Install Zsh
+install_zsh() {
+  if command -v zsh >/dev/null 2>&1; then
+    log "Zsh is already installed."
+    register_completed_step "Zsh (already installed)"
+    return
+  fi
+  log "Installing Zsh..."
+  if ! sudo apt update && sudo apt install zsh; then
+    error "Failed to install Zsh"
+  fi
+  register_completed_step "Zsh"
+  log "Zsh installed successfully!"
+}
+
 # Install Oh My Zsh
 install_oh_my_zsh() {
+  if ! command -v zsh >/dev/null 2>&1; then
+    install_zsh
+  fi
+
   if [ -d "$HOME/.oh-my-zsh" ]; then
     log "Oh My Zsh is already installed."
     register_completed_step "Oh My Zsh (already installed)"
@@ -267,13 +286,13 @@ ask_continue() {
   local step="$2"
   echo -e "\n${GREEN}[INFO]${NC} Step $step: $message"
   echo -e "${GREEN}[INFO]${NC} Options:"
-  echo -e "  ${GREEN}[s]${NC} - Yes, continue"
+  echo -e "  ${GREEN}[y]${NC} - Yes, continue"
   echo -e "  ${GREEN}[n]${NC} - No, skip this step"
   echo -e "  ${GREEN}[q]${NC} - Exit installation"
-  read -p "Your choice (s/n/q): " response
+  read -p "Your choice (y/n/q): " response
 
   case "$response" in
-    [Ss]*)
+    [Yy]*)
       return 0
       ;;
     [Nn]*)
