@@ -325,8 +325,6 @@ main() {
   echo "10. Configure the fonts"
   echo "11. Install Yaak (optional)"
 
-  ask_continue "Do you want to start the installation?" "0" || exit 0
-
   if ask_continue "Install Oh My Zsh" "1"; then
     install_oh_my_zsh
   fi
