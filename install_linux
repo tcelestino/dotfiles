@@ -114,40 +114,36 @@ install_brew() {
   log "Homebrew installed successfully!"
 }
 
-# Install Zsh
+# Install zsh
 install_zsh() {
   if command -v zsh >/dev/null 2>&1; then
-    log "Zsh is already installed."
-    register_completed_step "Zsh (already installed)"
+    log "zsh is already installed."
+    register_completed_step "zsh (already installed)"
     return
   fi
-  log "Installing Zsh..."
+  log "Installing zsh..."
   if ! sudo apt update && sudo apt install zsh; then
-    error "Failed to install Zsh"
+    error "Failed to install zsh"
   fi
-  register_completed_step "Zsh"
-  log "Zsh installed successfully!"
+  register_completed_step "zsh"
+  log "zsh installed successfully!"
 }
 
-# Install Oh My Zsh
+# Install oh-my-zsh
 install_oh_my_zsh() {
-  if ! command -v zsh >/dev/null 2>&1; then
-    install_zsh
-  fi
-
   if [ -d "$HOME/.oh-my-zsh" ]; then
-    log "Oh My Zsh is already installed."
-    register_completed_step "Oh My Zsh (already installed)"
+    log "oh-my-zsh is already installed."
+    register_completed_step "oh-my-zsh (already installed)"
     return
   fi
 
-  log "Installing Oh My Zsh..."
+  log "Installing oh-my-zsh..."
   if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
-    error "Failed to install Oh My Zsh"
+    error "Failed to install oh-my-zsh"
   fi
 
-  register_completed_step "Oh My Zsh"
-  log "Oh My Zsh installed successfully!"
+  register_completed_step "oh-my-zsh"
+  log "oh-my-zsh installed successfully!"
 }
 
 # Install Node.js
@@ -313,60 +309,65 @@ ask_continue() {
 main() {
   log "Starting installation from $DIR..."
   log "This script will configure your environment with the following steps:"
-  echo -e "\n1. Install Oh My Zsh"
-  echo "2. Install Homebrew"
-  echo "3. Install Node.js"
-  echo "4. Install Deno"
-  echo "5. Configure Zsh"
-  echo "6. Configure Homebrew and install packages"
-  echo "7. Configure Git"
-  echo "8. Configure NPM"
-  echo "9. Install global NPM packages"
-  echo "10. Configure the fonts"
-  echo "11. Install Yaak (optional)"
+  echo "1. Install zsh"
+  echo "2. Install oh-my-zsh"
+  echo "3. Install Homebrew"
+  echo "4. Install Node.js"
+  echo "5. Install Deno"
+  echo "6. Install Yaak (HTTP Client GUI)"
+  echo "7. Configure Zsh"
+  echo "8. Configure Homebrew and install packages"
+  echo "9. Configure Git"
+  echo "10. Configure NPM"
+  echo "11. Install global NPM packages"
+  echo "12. Configure the fonts"
 
-  if ask_continue "Install Oh My Zsh" "1"; then
+  if ask_continue "Install zsh" "1"; then
+    install_zsh
+  fi
+
+  if ask_continue "Install oh-my-zsh" "2"; then
     install_oh_my_zsh
   fi
 
-  if ask_continue "Install Homebrew" "2"; then
+  if ask_continue "Install Homebrew" "3"; then
     install_brew
   fi
 
-  if ask_continue "Install Node.js" "3"; then
+  if ask_continue "Install Node.js" "4"; then
     install_node_using_n
   fi
 
-  if ask_continue "Install Deno" "4"; then
+  if ask_continue "Install Deno" "5"; then
     install_deno
   fi
 
-  if ask_continue "Configure Zsh" "5"; then
+  if ask_continue "Install Yaak (HTTP Client GUI)" "6"; then
+    install_yaak
+  fi
+
+  if ask_continue "Configure Zsh" "7"; then
     setup_zsh
   fi
 
-  if ask_continue "Configure Homebrew and install packages" "6"; then
+  if ask_continue "Configure Homebrew and install packages" "8"; then
     setup_brew
   fi
 
-  if ask_continue "Configure Git" "7"; then
+  if ask_continue "Configure Git" "9"; then
     setup_git
   fi
 
-  if ask_continue "Configure NPM" "8"; then
+  if ask_continue "Configure NPM" "10"; then
     setup_npm
   fi
 
-  if ask_continue "Install global some NPM packages" "9"; then
+  if ask_continue "Install global some NPM packages" "11"; then
     install_pkg_global
   fi
 
-  if ask_continue "Configure the fonts" "10"; then
+  if ask_continue "Configure the fonts" "12"; then
     setup_fonts
-  fi
-
-  if ask_continue "Install Yaak (HTTP Client GUI)?" "11"; then
-    install_yaak
   fi
 
   log "Configurations completed successfully! 🎉"
