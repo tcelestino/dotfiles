@@ -121,8 +121,12 @@ install_zsh() {
     register_completed_step "zsh (already installed)"
     return
   fi
+  log "Updating package list..."
+  if ! sudo apt update; then
+    error "Failed to update package list (apt update)"
+  fi
   log "Installing zsh..."
-  if ! sudo apt update && sudo apt install zsh; then
+  if ! sudo apt install -y zsh; then
     error "Failed to install zsh"
   fi
   register_completed_step "zsh"
