@@ -10,22 +10,28 @@ NC='\033[0m'
 # Get current location
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-# Helper function to print info messages
+# Array to store completed steps
+declare -a completed_steps=()
+
+# Register a completed step
+# @param $1 Step name
+register_completed_step() {
+  local step="$1"
+  completed_steps+=("$step")
+}
+
+# Print info messages
+# @param $1 Message
 log() {
   echo -e "${GREEN}[INFO]${NC} $1"
 }
 
-# Helper function to print error messages in red and exit
+# Print error messages in red and exit
+# @param $1 Message
 error() {
   echo -e "${RED}[ERROR]${NC} $1"
   exit 1
 }
-
-# Verify if required dependencies (Node.js, Homebrew, Git) are installed
-# check_dependencies() {
-#   command -v node >/dev/null 2>&1 || error "Node.js is required but not installed. https://nodejs.org/"
-#   command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
-# }
 
 # Create a symbolic link
 # @param $1 Source file path
@@ -91,134 +97,288 @@ copy_file() {
   fi
 }
 
-# Install Homebrew if not already installed
+# Install Homebrew
 install_brew() {
-  if ! command -v brew >/dev/null 2>&1; then
-    log "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  else
+  if command -v brew >/dev/null 2>&1; then
     log "Homebrew is already installed."
+    register_completed_step "Homebrew (already installed)"
+    return
   fi
+
+  log "Installing Homebrew..."
+  if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+    error "Failed to install Homebrew"
+  fi
+
+  register_completed_step "Homebrew"
+  log "Homebrew installed successfully!"
 }
 
-# Install Oh My Zsh if not already installed
+# Install zsh
+install_zsh() {
+  if command -v zsh >/dev/null 2>&1; then
+    log "zsh is already installed."
+    register_completed_step "zsh (already installed)"
+    return
+  fi
+  log "Updating package list..."
+  if ! sudo apt update; then
+    error "Failed to update package list (apt update)"
+  fi
+  log "Installing zsh..."
+  if ! sudo apt install -y zsh; then
+    error "Failed to install zsh"
+  fi
+  register_completed_step "zsh"
+  log "zsh installed successfully!"
+}
+
+# Install oh-my-zsh
 install_oh_my_zsh() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
-      log "oh-my-zsh is already installed."
+    log "oh-my-zsh is already installed."
+    register_completed_step "oh-my-zsh (already installed)"
+    return
+  fi
+
+  log "Installing oh-my-zsh..."
+  if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
+    error "Failed to install oh-my-zsh"
+  fi
+
+  register_completed_step "oh-my-zsh"
+  log "oh-my-zsh installed successfully!"
+}
+
+# Install Node.js
+install_node_using_n() {
+  if [ -d "$HOME/local/n/versions/node" ]; then
+    log "Node.js is already installed."
+    register_completed_step "Node.js (already installed)"
+    return
   else
-      log "Installing oh-my-zsh..."
-      if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
-          error "Failed to install oh-my-zsh"
-      fi
+    log "Installing Node.js..."
+    if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-install | bash -s 22)"; then
+      error "Failed to install Node.js"
+    fi
+    register_completed_step "Node.js"
+    log "Node.js installed successfully!"
   fi
 }
 
-# Install Deno runtime if not already installed
+# Install Deno runtime
 install_deno() {
-  if [ -d "$HOME/.deno/bin/deno" ]; then
+  if [ -f "$HOME/.deno/bin/deno" ] || command -v deno >/dev/null 2>&1; then
     log "Deno is already installed.."
+    register_completed_step "Deno (already installed)"
+    return
   else
     log "Installing Deno"
     if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
       error "Failed to install Deno"
     fi
+    register_completed_step "Deno"
+    log "Deno installed successfully!"
   fi
 }
 
-# Configure Git settings by linking gitconfig file
+# Install global NPM packages
+install_pkg_global() {
+  log "Installing global npm packages..."
+  npm install -g git-cz fastify-cli npm-check-updates node-notifier-cli
+  register_completed_step "NPM packages"
+  log "NPM packages installed successfully!"
+}
+
+# Install Yaak via deb package
+install_yaak() {
+  local yaak_url="https://github.com/mountain-loop/yaak/releases/download/v2025.4.0/yaak_2025.4.0_amd64.deb" #latest version at 2025.06.19
+
+  if [ ! -d "/tmp" ]; then
+    mkdir -p "/tmp"
+  fi
+
+  local tmp_folder="/tmp"
+  local tmp_file="$tmp_folder/yaak-x86_64.deb"
+
+  log "Downloading Yaak..."
+  if ! curl -L "$yaak_url" -o "$tmp_file"; then
+    error "Failed to download Yaak."
+  fi
+
+  log "Installing Yaak..."
+  if ! sudo dpkg -i "$tmp_file"; then
+    error "Failed to install Yaak."
+  fi
+
+
+  log "Removing temporary files..."
+  rm -f "$tmp_file"
+  log "Temporary files removed."
+
+  register_completed_step "Yaak"
+  log "Yaak installed successfully!"
+}
+
+# Configure Git settings
 setup_git() {
   copy_file "$DIR/git/.gitconfig" "$HOME/.gitconfig"
   copy_file "$DIR/git/.gitignore" "$HOME/.gitignore"
   copy_file "$DIR/git/.gitattributes" "$HOME/.gitattributes"
+  copy_file "$DIR/git/.git-commit-template" "$HOME/.git-commit-template"
+  register_completed_step "Git"
+  log "Git configured successfully!"
 }
 
-# Configure Zsh settings by linking various configuration files
+# Configure Zsh settings
 setup_zsh() {
-  copy_file "$DIR/zsh/.zshrc" "$HOME/.zshrc"
+  copy_file "$DIR/linux/zsh/.zshrc" "$HOME/.zshrc"
   copy_dir "$DIR/zsh/themes" "$HOME/.oh-my-zsh/themes"
   copy_file "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
   copy_dir "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
+
+  register_completed_step "Zsh"
+  log "Zsh configured successfully!"
 }
 
-# Install global NPM packages required for development
-install_global_npm_pkg() {
-  log "Installing global npm packages..."
-  npm install -g git-cz # https://github.com/streamich/git-cz
-  npm install -g n # https://github.com/tj/n
-  npm install -g fastify-cli #https://fastify.dev/
+# Configure Homebrew and install packages from Brewfile
+setup_brew() {
+  copy_file "$DIR/linux/Brewfile" "$HOME/Brewfile"
+  log "Executing brew bundle install..."
+  if ! brew bundle install; then
+      error "Brew bundle install failed"
+  fi
+  register_completed_step "Homebrew"
+  log "Homebrew configured successfully!"
 }
 
 # Configure NPM settings and install global packages
 setup_npm() {
   copy_file "$DIR/.npmrc" "$HOME/.npmrc"
+  register_completed_step "NPM"
+  log "NPM configured successfully!"
 
   # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
   if [ -d "$HOME/.npm-packages" ]; then
     log ".npm-packages folder exists"
+    return
   else
     mkdir -p "$HOME/.npm-packages"
   fi
-
-  install_global_npm_pkg
 }
 
-# Configure Homebrew and install packages from Brewfile
-setup_brew() {
-  copy_file "$DIR/Brewfile" "$HOME/Brewfile"
-  log "Executing brew bundle install..."
-  if ! brew bundle install; then
-      error "Brew bundle install failed"
-  fi
-}
-
-# Install custom fonts based on the operating system
+# Custom fonts
 setup_fonts() {
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS
-    local font_dir="$HOME/Library/Fonts"
-    if [ ! -d "$font_dir" ]; then
-      mkdir -p "$font_dir"
-    fi
-    log "Installing fonts for macOS..."
-    cp "$DIR/extras/fonts/"* "$font_dir/"
-  elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    # Ubuntu/Linux
-    local font_dir="$HOME/.local/share/fonts"
-    if [ ! -d "$font_dir" ]; then
-      mkdir -p "$font_dir"
-    fi
-    log "Installing fonts for Linux..."
-    cp "$DIR/extras/fonts/"* "$font_dir/"
-    fc-cache -f -v
-  else
-    error "Unsupported operating system"
+  local font_dir="$HOME/.local/share/fonts"
+  if [ ! -d "$font_dir" ]; then
+    mkdir -p "$font_dir"
   fi
+  copy_dir "$DIR/extras/fonts" "$font_dir"
+  log "Installing fonts for Linux..."
+  fc-cache -f -v
+
+  register_completed_step "Fonts"
+  log "Fonts installed successfully!"
 }
 
-# Configure macOS system settings if running on macOS
-setup_macos() {
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    log "Setting up macOS..."
-    sh .macos
-    copy_file "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config" # Configure duti (macOS default application manager) settings
-  fi
+ask_continue() {
+  local message="$1"
+  local step="$2"
+  echo -e "\n${GREEN}[INFO]${NC} Step $step: $message"
+  echo -e "${GREEN}[INFO]${NC} Options:"
+  echo -e "  ${GREEN}[y]${NC} - Yes, continue"
+  echo -e "  ${GREEN}[n]${NC} - No, skip this step"
+  echo -e "  ${GREEN}[q]${NC} - Exit installation"
+  read -p "Your choice (y/n/q): " response
+
+  case "$response" in
+    [Yy]*)
+      return 0
+      ;;
+    [Nn]*)
+      log "Step $step skipped."
+      return 1
+      ;;
+    [Qq]*)
+      log "Installation interrupted by user."
+      exit 0
+      ;;
+    *)
+      log "Invalid option. Please try again."
+      ask_continue "$message" "$step"
+      ;;
+  esac
 }
 
 main() {
   log "Starting installation from $DIR..."
+  log "This script will configure your environment with the following steps:"
+  echo "1. Install zsh"
+  echo "2. Install oh-my-zsh"
+  echo "3. Install Homebrew"
+  echo "4. Install Node.js"
+  echo "5. Install Deno"
+  echo "6. Install Yaak (HTTP Client GUI)"
+  echo "7. Configure Zsh"
+  echo "8. Configure Homebrew and install packages"
+  echo "9. Configure Git"
+  echo "10. Configure NPM"
+  echo "11. Install global NPM packages"
+  echo "12. Configure the fonts"
 
-  install_oh_my_zsh
-  install_brew
-  install_deno
+  if ask_continue "Install zsh" "1"; then
+    install_zsh
+  fi
 
-  setup_zsh
-  setup_brew
-  setup_git
-  setup_npm
-  setup_macos
-  setup_fonts
+  if ask_continue "Install oh-my-zsh" "2"; then
+    install_oh_my_zsh
+  fi
 
-  log "Settings completed successfully! 🎉"
+  if ask_continue "Install Homebrew" "3"; then
+    install_brew
+  fi
+
+  if ask_continue "Install Node.js" "4"; then
+    install_node_using_n
+  fi
+
+  if ask_continue "Install Deno" "5"; then
+    install_deno
+  fi
+
+  if ask_continue "Install Yaak (HTTP Client GUI)" "6"; then
+    install_yaak
+  fi
+
+  if ask_continue "Configure Zsh" "7"; then
+    setup_zsh
+  fi
+
+  if ask_continue "Configure Homebrew and install packages" "8"; then
+    setup_brew
+  fi
+
+  if ask_continue "Configure Git" "9"; then
+    setup_git
+  fi
+
+  if ask_continue "Configure NPM" "10"; then
+    setup_npm
+  fi
+
+  if ask_continue "Install global some NPM packages" "11"; then
+    install_pkg_global
+  fi
+
+  if ask_continue "Configure the fonts" "12"; then
+    setup_fonts
+  fi
+
+  log "Configurations completed successfully! 🎉"
+  log "Steps executed:"
+  for step in "${completed_steps[@]}"; do
+    echo "- $step"
+  done
 }
 
 main "$@"
