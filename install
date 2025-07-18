@@ -142,9 +142,22 @@ install_oh_my_zsh() {
   fi
 
   log "Installing oh-my-zsh..."
-  if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
+
+  # Download the install script to a temporary file
+  local temp_script=$(mktemp)
+  if ! curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o "$temp_script"; then
+    error "Failed to download oh-my-zsh install script"
+  fi
+
+  # Make the script executable and run it
+  chmod +x "$temp_script"
+  if ! bash "$temp_script" --unattended; then
+    rm -f "$temp_script"
     error "Failed to install oh-my-zsh"
   fi
+
+  # Clean up the temporary script
+  rm -f "$temp_script"
 
   register_completed_step "oh-my-zsh"
   log "oh-my-zsh installed successfully!"
