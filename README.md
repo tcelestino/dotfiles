@@ -11,9 +11,15 @@ This repo is 100% open for you to explore and customize. Just clone it and swap 
 git clone git@github.com:tcelestino/dotfiles.git
 ```
 
-2. Edit `.zshrc` file and set config options for variables `USER_NAME`, `USER_EMAIL` and `NPM_SCOPE`. You might set `GH_TOKEN` and `NPM_TOKEN` too.
+2. Checkout the branch you want to use: `macos` or `ubuntu`
 
-3. Run the install script
+```bash
+git checkout <branch-name>
+```
+
+3. Open `.zshrc` file and set config options for variables `USER_NAME`, `USER_EMAIL` and `NPM_SCOPE`. You might set `GH_TOKEN` and `NPM_TOKEN` too.
+
+4. Run the install script
 
 ```bash
 ./install
