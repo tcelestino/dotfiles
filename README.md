@@ -50,6 +50,7 @@ This is my list of apps and tools that I use.
 | fastify-cli  | CLI for Fastify framework                                 | [https://www.fastify.io/](https://www.fastify.io/) |
 | npm-check-updates | Tool to update npm dependencies              | [https://www.npmjs.com/package/npm-check-updates](https://www.npmjs.com/package/npm-check-updates) |
 | git-cz       | Tool for conventional commits                        | [https://www.npmjs.com/package/git-cz](https://www.npmjs.com/package/git-cz)                       |
+| @nestjs/cli | NestJS Command Line Interface            | [https://docs.nestjs.com/](https://docs.nestjs.com/) |
 
 ## Additional Configurations
 
