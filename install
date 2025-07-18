@@ -150,22 +150,6 @@ install_oh_my_zsh() {
   log "oh-my-zsh installed successfully!"
 }
 
-# Install Node.js
-install_node_using_n() {
-  if [ -d "$HOME/local/n/versions/node" ]; then
-    log "Node.js is already installed."
-    register_completed_step "Node.js (already installed)"
-    return
-  else
-    log "Installing Node.js..."
-    if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-install | bash -s 22)"; then
-      error "Failed to install Node.js"
-    fi
-    register_completed_step "Node.js"
-    log "Node.js installed successfully!"
-  fi
-}
-
 # Install Deno runtime
 install_deno() {
   if [ -f "$HOME/.deno/bin/deno" ] || command -v deno >/dev/null 2>&1; then
@@ -182,44 +166,6 @@ install_deno() {
   fi
 }
 
-# Install global NPM packages
-install_pkg_global() {
-  log "Installing global npm packages..."
-  npm install -g git-cz fastify-cli npm-check-updates node-notifier-cli
-  register_completed_step "NPM packages"
-  log "NPM packages installed successfully!"
-}
-
-# Install Yaak via deb package
-install_yaak() {
-  local yaak_url="https://github.com/mountain-loop/yaak/releases/download/v2025.4.0/yaak_2025.4.0_amd64.deb" #latest version at 2025.06.19
-
-  if [ ! -d "/tmp" ]; then
-    mkdir -p "/tmp"
-  fi
-
-  local tmp_folder="/tmp"
-  local tmp_file="$tmp_folder/yaak-x86_64.deb"
-
-  log "Downloading Yaak..."
-  if ! curl -L "$yaak_url" -o "$tmp_file"; then
-    error "Failed to download Yaak."
-  fi
-
-  log "Installing Yaak..."
-  if ! sudo dpkg -i "$tmp_file"; then
-    error "Failed to install Yaak."
-  fi
-
-
-  log "Removing temporary files..."
-  rm -f "$tmp_file"
-  log "Temporary files removed."
-
-  register_completed_step "Yaak"
-  log "Yaak installed successfully!"
-}
-
 # Configure Git settings
 setup_git() {
   copy_file "$DIR/git/.gitconfig" "$HOME/.gitconfig"
@@ -232,7 +178,7 @@ setup_git() {
 
 # Configure Zsh settings
 setup_zsh() {
-  copy_file "$DIR/linux/zsh/.zshrc" "$HOME/.zshrc"
+  copy_file "$DIR/zsh/.zshrc" "$HOME/.zshrc"
   copy_dir "$DIR/zsh/themes" "$HOME/.oh-my-zsh/themes"
   copy_file "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
   copy_dir "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
@@ -243,7 +189,7 @@ setup_zsh() {
 
 # Configure Homebrew and install packages from Brewfile
 setup_brew() {
-  copy_file "$DIR/linux/Brewfile" "$HOME/Brewfile"
+  copy_file "$DIR/Brewfile" "$HOME/Brewfile"
   log "Executing brew bundle install..."
   if ! brew bundle install; then
       error "Brew bundle install failed"
@@ -252,7 +198,7 @@ setup_brew() {
   log "Homebrew configured successfully!"
 }
 
-# Configure NPM settings and install global packages
+# NPM Settings
 setup_npm() {
   copy_file "$DIR/.npmrc" "$HOME/.npmrc"
   register_completed_step "NPM"
@@ -267,7 +213,7 @@ setup_npm() {
   fi
 }
 
-# Custom fonts
+# Set my favorite custom fonts
 setup_fonts() {
   local font_dir="$HOME/.local/share/fonts"
   if [ ! -d "$font_dir" ]; then
@@ -316,15 +262,12 @@ main() {
   echo "1. Install zsh"
   echo "2. Install oh-my-zsh"
   echo "3. Install Homebrew"
-  echo "4. Install Node.js"
-  echo "5. Install Deno"
-  echo "6. Install Yaak (HTTP Client GUI)"
-  echo "7. Configure Zsh"
-  echo "8. Configure Homebrew and install packages"
-  echo "9. Configure Git"
-  echo "10. Configure NPM"
-  echo "11. Install global NPM packages"
-  echo "12. Configure the fonts"
+  echo "4. Install Deno"
+  echo "5. Configure Zsh"
+  echo "6. Configure Homebrew and install packages"
+  echo "7. Configure Git"
+  echo "8. Configure NPM"
+  echo "9. Configure the fonts"
 
   if ask_continue "Install zsh" "1"; then
     install_zsh
@@ -338,39 +281,27 @@ main() {
     install_brew
   fi
 
-  if ask_continue "Install Node.js" "4"; then
-    install_node_using_n
-  fi
-
-  if ask_continue "Install Deno" "5"; then
+  if ask_continue "Install Deno" "4"; then
     install_deno
   fi
 
-  if ask_continue "Install Yaak (HTTP Client GUI)" "6"; then
-    install_yaak
-  fi
-
-  if ask_continue "Configure Zsh" "7"; then
+  if ask_continue "Configure Zsh" "5"; then
     setup_zsh
   fi
 
-  if ask_continue "Configure Homebrew and install packages" "8"; then
+  if ask_continue "Configure Homebrew and install packages" "6"; then
     setup_brew
   fi
 
-  if ask_continue "Configure Git" "9"; then
+  if ask_continue "Configure Git" "7"; then
     setup_git
   fi
 
-  if ask_continue "Configure NPM" "10"; then
+  if ask_continue "Configure NPM" "8"; then
     setup_npm
   fi
 
-  if ask_continue "Install global some NPM packages" "11"; then
-    install_pkg_global
-  fi
-
-  if ask_continue "Configure the fonts" "12"; then
+  if ask_continue "Configure the fonts" "9"; then
     setup_fonts
   fi
 

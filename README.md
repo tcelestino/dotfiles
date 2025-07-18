@@ -1,42 +1,59 @@
 # dotfiles
 
-Hey! 👋
-
-This repo stores my personal app configs and customizations. I mainly use zsh, but you can adapt for bash or other shells.
-Since I work with macOS and Ubuntu, configs are optimized for these OSs. But no worries - you can easily tweak them for other systems too!
-
-## Usage
-
+This is my dotfiles for personal app configs and customizations. I mainly use zsh, but you might adapt for bash or other shells.
 This repo is 100% open for you to explore and customize. Just clone it and swap my configs with yours - makes it super easy to get your dev environment up and running on any new machine.
 
-## Getting Started
+## How to use
 
-1. Clone this repository to your local machine:
+1. Clone this repository:
 
 ```bash
 git clone git@github.com:tcelestino/dotfiles.git
 ```
 
-2. Open folder `dotfiles` and set run file to install
+2. Edit `.zshrc` file and set config options for variables `USER_NAME`, `USER_EMAIL` and `NPM_SCOPE`. You might set `GH_TOKEN` and `NPM_TOKEN` too.
 
-```bash
-chmod +x install
-```
-3. Open `.zshrc` file and change variables "USER_NAME", "USER_EMAIL" and "NPM_SCOPE". You might set `GH_TOKEN` and `NPM_TOKEN` too.
-
-```bash
-
-4. Run the install script
+3. Run the install script
 
 ```bash
 ./install
 ```
 ⚠️ **Don't forget to set values `GH_TOKEN` and `NPM_TOKEN`!!**
 
+## My Apps
+
+This is my list of apps and tools that I use.
+
+### Apps
+
+| Name         | Description                                                    | Download URL                                              |
+|--------------|-------------------------------------------------------------|---------------------------------------------------------------|
+| Terminator   | Multi-monitor terminal for Linux                           | [https://gnometerminator.blogspot.com/p/introduction.html](https://gnometerminator.blogspot.com/p/introduction.html) |
+| Ulauncher   | Spotlight for Linux                                        | [https://ulauncher.io/](https://ulauncher.io/) |
+| VSCode   | Code editor                                        | [https://code.visualstudio.com/](https://code.visualstudio.com/) |
+| Cursor   | AI-powered code editor                                        | [https://www.cursor.com/](https://www.cursor.com/) |
+| Firefox  | Web browser                                        | [https://www.firefox.com/](https://www.firefox.com/) |
+| Beekeeper Studio | Database management tool                                        | [https://www.beekeeperstudio.io/](https://www.beekeeperstudio.io/) |
+
+### Development tools
+
+| Name         | Description                                                    | Download URL                                              |
+|--------------|-------------------------------------------------------------|-----------------------------------------------------------------|
+| Node.js      | JavaScript runtime for application development        | [https://nodejs.org/](https://nodejs.org/)                    |
+| Yarn         | Fast and reliable package manager for Node.js       | [https://yarnpkg.com/](https://yarnpkg.com/)                  |
+| Git          | Distributed version control system                    | [https://git-scm.com/](https://git-scm.com/)                  |
+
+### NPM packages
+
+| Name         | Description                                                    | Download URL                                              |
+|--------------|-------------------------------------------------------------|---------------------------------------------------------------|
+| fastify-cli  | CLI for Fastify framework                                 | [https://www.fastify.io/](https://www.fastify.io/) |
+| npm-check-updates | Tool to update npm dependencies              | [https://www.npmjs.com/package/npm-check-updates](https://www.npmjs.com/package/npm-check-updates) |
+| git-cz       | Tool for conventional commits                        | [https://www.npmjs.com/package/git-cz](https://www.npmjs.com/package/git-cz)                       |
+
 ## Additional Configurations
 
-- To set the keyboard layout to include the 'ç' character on Ubuntu, follow the steps in the article "[Ajeitando o cedilha errado (ć) no Ubuntu Linux](https://www.danielkossmann.com/pt/ajeitando-cedilha-errado-ubuntu-linux/)"
-- If you use iTerm2, you might import the color scheme and other configurations into iTerm2. The settings can be found in the "iterm2" folder.
+- To set the keyboard layout to include the 'ç' character on Ubuntu, follow the steps in the article "[Fixing the wrong cedilla (ć) in Ubuntu Linux](https://www.danielkossmann.com/pt/ajeitando-cedilha-errado-ubuntu-linux/)"
 
 ## Contributing
 
