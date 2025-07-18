@@ -28,7 +28,7 @@ This is my list of apps and tools that I use.
 
 | Name         | Description                                                    | Download URL                                              |
 |--------------|-------------------------------------------------------------|---------------------------------------------------------------|
-| Terminator   | Multi-monitor terminal for Linux                           | [https://gnometerminator.blogspot.com/p/introduction.html](https://gnometerminator.blogspot.com/p/introduction.html) |
+| Terminator   | Multi-monitor terminal for Linux                           | [https://gnome-terminator.org/](https://gnome-terminator.org/) |
 | Ulauncher   | Spotlight for Linux                                        | [https://ulauncher.io/](https://ulauncher.io/) |
 | VSCode   | Code editor                                        | [https://code.visualstudio.com/](https://code.visualstudio.com/) |
 | Cursor   | AI-powered code editor                                        | [https://www.cursor.com/](https://www.cursor.com/) |
