@@ -117,9 +117,9 @@ setup_zsh() {
     copy_file "$DIR/linux/.zshrc" "$HOME/.zshrc"
   fi
 
-  copy_dir "$DIR/../zsh/themes" "$HOME/.oh-my-zsh/themes"
-  copy_file "$DIR/../zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
-  copy_dir "$DIR/../zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
+  copy_dir "$DIR/zsh/themes" "$HOME/.oh-my-zsh/themes"
+  copy_file "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+  copy_dir "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
 
   register_completed_step "zsh"
   log "zsh settings configured successfully!"
