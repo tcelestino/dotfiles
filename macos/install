@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+# Get current location
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Array to store completed steps
+declare -a completed_steps=()
+
+# Register a completed step
+# @param $1 Step name
+register_completed_step() {
+  local step="$1"
+  completed_steps+=("$step")
+}
+
+# Print info messages
+# @param $1 Message
+log() {
+  echo -e "${GREEN}[INFO]${NC} $1"
+}
+
+# Print error messages in red and exit
+# @param $1 Message
+error() {
+  echo -e "${RED}[ERROR]${NC} $1"
+  exit 1
+}
+
+# Create a symbolic link
+# @param $1 Source file path
+# @param $2 Destination link path
+safe_link() {
+  local src="$1"
+  local dest="$2"
+
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+      log "Found $dest - removing..."
+      rm -f "$dest"
+  fi
+
+  if [ ! -e "$src" ]; then
+      error "Source file $src does not exist!"
+  fi
+
+  log "Linking $dest to $src"
+  ln -s "$src" "$dest"
+}
+
+# Copy a directory
+# @param $1 Source directory path
+# @param $2 Destination directory path
+copy_dir() {
+    local src="$1"
+    local dest="$2"
+
+    if [ ! -d "$src" ]; then
+        error "Source directory $src does not exist!"
+    fi
+
+    if [ -d "$dest" ]; then
+        log "Found $dest - renaming..."
+        mv "$dest" "$dest.old"
+    fi
+
+    log "Copying directory $src to $dest"
+    if ! cp -R "$src" "$dest"; then
+        error "Failed to copy directory $src to $dest"
+    fi
+}
+
+# Copy a file
+# @param $1 Source file path
+# @param $2 Destination file path
+copy_file() {
+  local src="$1"
+  local dest="$2"
+
+  if [ ! -f "$src" ]; then
+    error "Source file $src does not exist!"
+  fi
+
+  if [ -f "$dest" ]; then
+    log "Found $dest - renaming..."
+    mv "$dest" "$dest.old"
+  fi
+
+  log "Copying file $src to $dest"
+  if ! cp "$src" "$dest"; then
+    error "Failed to copy file $src to $dest"
+  fi
+}

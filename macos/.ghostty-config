@@ -1,0 +1,6 @@
+font-family = "JetBrains Mono NL"
+font-size = 16
+theme = dracula
+
+#keybind = super+v=paste_from_selection
+#keybind = super+shift+v=paste_from_clipboard
