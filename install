@@ -103,10 +103,10 @@ setup_zsh() {
     error "zsh is not installed. Please install zsh before continuing."
   fi
 
-  if [ -d "$HOME/.oh-my-zsh" ]; then
-    log "oh-my-zsh already configured. Skipping..."
-    return
-  fi
+  # if [ -d "$HOME/.oh-my-zsh" ]; then
+  #   log "oh-my-zsh already configured. Skipping..."
+  #   return
+  # fi
 
   # copy zshrc based on the OS
   if [[ "$OSTYPE" == "darwin"* ]]; then
