@@ -102,7 +102,5 @@ cask "pearcleaner"
 cask "shottr"
 # System monitor for the menu bar
 cask "stats"
-# Rust-based terminal
-cask "warp"
 # REST, GraphQL and gRPC client
 cask "yaak"
