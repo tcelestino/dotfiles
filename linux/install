@@ -97,86 +97,23 @@ copy_file() {
   fi
 }
 
-# Install Homebrew
-install_brew() {
-  if command -v brew >/dev/null 2>&1; then
-    log "Homebrew is already installed."
-    register_completed_step "Homebrew (already installed)"
-    return
+# Configure zsh settings
+setup_zsh() {
+  if ! command -v zsh >/dev/null 2>&1; then
+    error "zsh is not installed. Please install zsh first."
   fi
 
-  log "Installing Homebrew..."
-  if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
-    error "Failed to install Homebrew"
+  if ! [ -d "$HOME/.oh-my-zsh" ]; then
+    error "oh-my-zsh is not installed. Please install oh-my-zsh first."
   fi
 
-  register_completed_step "Homebrew"
-  log "Homebrew installed successfully!"
-}
+  copy_file "$DIR/.zshrc" "$HOME/.zshrc"
+  copy_dir "$DIR/../zsh/themes" "$HOME/.oh-my-zsh/themes"
+  copy_file "$DIR/../zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+  copy_dir "$DIR/../zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
 
-# Install zsh
-install_zsh() {
-  if command -v zsh >/dev/null 2>&1; then
-    log "zsh is already installed."
-    register_completed_step "zsh (already installed)"
-    return
-  fi
-  log "Updating package list..."
-  if ! sudo apt update; then
-    error "Failed to update package list (apt update)"
-  fi
-  log "Installing zsh..."
-  if ! sudo apt install -y zsh; then
-    error "Failed to install zsh"
-  fi
   register_completed_step "zsh"
-  log "zsh installed successfully!"
-}
-
-# Install oh-my-zsh
-install_oh_my_zsh() {
-  if [ -d "$HOME/.oh-my-zsh" ]; then
-    log "oh-my-zsh is already installed."
-    register_completed_step "oh-my-zsh (already installed)"
-    return
-  fi
-
-  log "Installing oh-my-zsh..."
-
-  # Download the install script to a temporary file
-  local temp_script=$(mktemp)
-  if ! curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -o "$temp_script"; then
-    error "Failed to download oh-my-zsh install script"
-  fi
-
-  # Make the script executable and run it
-  chmod +x "$temp_script"
-  if ! bash "$temp_script" --unattended; then
-    rm -f "$temp_script"
-    error "Failed to install oh-my-zsh"
-  fi
-
-  # Clean up the temporary script
-  rm -f "$temp_script"
-
-  register_completed_step "oh-my-zsh"
-  log "oh-my-zsh installed successfully!"
-}
-
-# Install Deno runtime
-install_deno() {
-  if [ -f "$HOME/.deno/bin/deno" ] || command -v deno >/dev/null 2>&1; then
-    log "Deno is already installed.."
-    register_completed_step "Deno (already installed)"
-    return
-  else
-    log "Installing Deno"
-    if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
-      error "Failed to install Deno"
-    fi
-    register_completed_step "Deno"
-    log "Deno installed successfully!"
-  fi
+  log "zsh settings configured successfully!"
 }
 
 # Configure Git settings
@@ -186,29 +123,22 @@ setup_git() {
   copy_file "$DIR/../git/.gitattributes" "$HOME/.gitattributes"
   copy_file "$DIR/../git/.git-commit-template" "$HOME/.git-commit-template"
   register_completed_step "Git"
-  log "Git configured successfully!"
-}
-
-# Configure Zsh settings
-setup_zsh() {
-  copy_file "$DIR/.zshrc" "$HOME/.zshrc"
-  copy_dir "$DIR/../zsh/themes" "$HOME/.oh-my-zsh/themes"
-  copy_file "$DIR/../zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
-  copy_dir "$DIR/../zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
-
-  register_completed_step "Zsh"
-  log "Zsh configured successfully!"
+  log "Git settings configured successfully!"
 }
 
 # Configure Homebrew and install packages from Brewfile
 setup_brew() {
+  if ! command -v brew >/dev/null 2>&1; then
+    error "Homebrew is not installed. Please install Homebrew first."
+  fi
+
   copy_file "$DIR/Brewfile" "$HOME/Brewfile"
   log "Executing brew bundle install..."
   if ! brew bundle install; then
       error "Brew bundle install failed"
   fi
   register_completed_step "Homebrew"
-  log "Homebrew configured successfully!"
+  log "Homebrew settings configured successfully!"
 }
 
 # NPM Settings
@@ -226,6 +156,17 @@ setup_npm() {
   fi
 }
 
+setup_global_npm_packages() {
+  if ! command -v node >/dev/null 2>&1; then
+    error "node is not installed. Please install node first."
+  fi
+
+  log "Installing global npm packages..."
+  npm install -g npm-check-updates n git-cz @nestjs/cli fastify-cli yarn
+  register_completed_step "npm packages"
+  log "npm packages installed successfully!"
+}
+
 # Set my favorite custom fonts
 setup_fonts() {
   local font_dir="$HOME/.local/share/fonts"
@@ -233,11 +174,20 @@ setup_fonts() {
     mkdir -p "$font_dir"
   fi
   copy_dir "$DIR/../extras/fonts" "$font_dir"
-  log "Installing fonts for Linux..."
+  log "Copying fonts for Linux..."
+
+  if ! fc-cache -f -v; then
+    log "Installing Fontconfig..."
+    sudo apt update && sudo apt install fontconfig
+    log "Fontconfig installed successfully!"
+  fi
+
+  log "Fontcaching..."
   fc-cache -f -v
+  log "Fontcaching done!"
 
   register_completed_step "Fonts"
-  log "Fonts installed successfully!"
+  log "Fonts configured successfully!"
 }
 
 ask_continue() {
@@ -272,49 +222,35 @@ ask_continue() {
 main() {
   log "Starting installation from $DIR..."
   log "This script will configure your environment with the following steps:"
-  echo "1. Install zsh"
-  echo "2. Install oh-my-zsh"
-  echo "3. Install Homebrew"
-  echo "4. Install Deno"
-  echo "5. Configure Zsh"
-  echo "6. Configure Homebrew and install packages"
-  echo "7. Configure Git"
-  echo "8. Configure NPM"
-  echo "9. Configure the fonts"
 
-  if ask_continue "Install zsh" "1"; then
-    install_zsh
-  fi
+  echo "1. Configure Zsh"
+  echo "2. Configure Homebrew and install packages"
+  echo "3. Configure Git"
+  echo "4. Configure NPM"
+  echo "5. Install global npm packages"
+  echo "6. Configure the fonts"
 
-  if ask_continue "Install oh-my-zsh" "2"; then
-    install_oh_my_zsh
-  fi
-
-  if ask_continue "Install Homebrew" "3"; then
-    install_brew
-  fi
-
-  if ask_continue "Install Deno" "4"; then
-    install_deno
-  fi
-
-  if ask_continue "Configure Zsh" "5"; then
+  if ask_continue "Configure Zsh" "1"; then
     setup_zsh
   fi
 
-  if ask_continue "Configure Homebrew and install packages" "6"; then
+  if ask_continue "Configure Homebrew and install packages" "2"; then
     setup_brew
   fi
 
-  if ask_continue "Configure Git" "7"; then
+  if ask_continue "Configure Git" "3"; then
     setup_git
   fi
 
-  if ask_continue "Configure NPM" "8"; then
+  if ask_continue "Configure NPM" "4"; then
     setup_npm
   fi
 
-  if ask_continue "Configure the fonts" "9"; then
+  if ask_continue "Install global npm packages" "5"; then
+    setup_global_npm_packages
+  fi
+
+  if ask_continue "Configure the fonts" "6"; then
     setup_fonts
   fi
 
