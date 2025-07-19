@@ -12,16 +12,16 @@ alias serveo="ssh -R 80:localhost:3000 serveo.net"
 alias https-server="http-server --ssl --cert ~/.ssl/localhost.crt --key ~/.ssl/localhost.key -a localhost -o"
 
 # npm
-alias npm-i='npm install'
-alias npm-is='npm install --save'
-alias npm-id='npm install --save-dev'
-alias npm-ig='npm install --global'
-alias npm-start='npm start'
-alias npm-test='npm test'
-alias npm-it='npm install && npm test'
-alias npm-lk='npm link'
-alias npm-run='npm run'
-alias npm-ri='rm -rf node_modules && npm i'
+alias npm-i="npm install"
+alias npm-is="npm install --save"
+alias npm-id="npm install --save-dev"
+alias npm-ig="npm install --global"
+alias npm-start="npm start"
+alias npm-test="npm test"
+alias npm-it="npm install && npm test"
+alias npm-lk="npm link"
+alias npm-run="npm run"
+alias npm-ri="rm -rf node_modules && npm i"
 alias npm-reset='rm -rf node_modules && rm -f package-lock.json && npm install && npx node-notifier-cli -t "Done" -m "npm modules reinstalled" -s Glass -i https://cdn.rawgit.com/npm/logos/31945b5c/npm%20square/n-64.png'
 
 # git-cz
@@ -53,7 +53,7 @@ alias dcdv="docker-compose down -v" #stop with docker-compose and remove volumes
 alias dcr="docker-compose restart" #restart with docker-compose
 alias dcb="docker-compose build" #build with docker-compose
 alias dcl="docker-compose logs" #logs with docker-compose
-alias dcp="docker-compose -f docker-compose.dependencies.yaml up -d" #start dependencies with docker-compose
+alias dcdp="docker-compose -f docker-compose.dependencies.yaml up -d" #start dependencies with docker-compose
 
 # utils
 alias fs="stat -c "%s bytes""
