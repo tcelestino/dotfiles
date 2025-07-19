@@ -8,6 +8,7 @@ This repo is 100% open for you to explore and customize.
 
 You need to have the following tools installed:
 
+- [git](https://git-scm.com/downloads)
 - [zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
 - [oh-my-zsh](https://ohmyz.sh/#install)
 - [Homebrew](https://brew.sh/)
