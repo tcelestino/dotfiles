@@ -73,3 +73,7 @@ My list of Raycast extensions. Yes, I use Raycast free! 😀.
 - Video Downloader
 
 See more extensions at [https://www.raycast.com/store](https://www.raycast.com/store)
+
+### Raycast Quicklinks
+
+If you would like to use my Raycast quicklinks, please import the file [raycast-quicklinks.json](../extras/raycast-quicklinks.json) into Raycast.
