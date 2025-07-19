@@ -158,14 +158,14 @@ setup_brew() {
   # copy Brewfile based on the OS
   if [[ "$OSTYPE" == "darwin"* ]]; then
     log "Copying Brewfile for macOS..."
-    copy_file "$DIR/macos/Brewfile" "$HOME/Brewfile"
+    copy_file "$DIR/macos/.Brewfile" "$HOME/.Brewfile"
   else
     log "Copying Brewfile for Linux..."
-    copy_file "$DIR/linux/Brewfile" "$HOME/Brewfile"
+    copy_file "$DIR/linux/.Brewfile" "$HOME/.Brewfile"
   fi
 
   log "Executing brew bundle install..."
-  if ! brew bundle install; then
+  if ! brew bundle install --file="$HOME/.Brewfile"; then
       error "Brew bundle install failed"
   fi
   register_completed_step "Homebrew"
