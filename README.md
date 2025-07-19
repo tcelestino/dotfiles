@@ -49,16 +49,10 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 6. Install Node.js: [https://nodejs.org/en/download](https://nodejs.org/en/download)
 
-7. Choose your OS and run the install script: `macos` or `linux`:
+7. Run the install script:
 
 ```bash
-# macos
-./macos/install
-```
-
-```bash
-# linux
-./linux/install
+./install
 ```
 
 ## Apps and dev tools
