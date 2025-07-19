@@ -97,14 +97,14 @@ copy_file() {
   fi
 }
 
-# Configure zsh settings
+# Configure zsh
 setup_zsh() {
-  if ! command -v zsh >/dev/null 2>&1; then
-    error "zsh is not installed. Please install zsh first."
-  fi
-
-  if ! [ -d "$HOME/.oh-my-zsh" ]; then
-    error "oh-my-zsh is not installed. Please install oh-my-zsh first."
+  if ! command -v zsh >/dev/null 2>&1 && ! [ -d "$HOME/.oh-my-zsh" ]; then
+    error "zsh and oh-my-zsh are not installed. Please install both before continuing."
+  elif ! command -v zsh >/dev/null 2>&1; then
+    error "zsh is not installed. Please install zsh before continuing."
+  elif ! [ -d "$HOME/.oh-my-zsh" ]; then
+    error "oh-my-zsh is not installed. Please install oh-my-zsh before continuing."
   fi
 
   copy_file "$DIR/.zshrc" "$HOME/.zshrc"
@@ -116,7 +116,7 @@ setup_zsh() {
   log "zsh settings configured successfully!"
 }
 
-# Configure Git settings
+# Configure Git
 setup_git() {
   copy_file "$DIR/../git/.gitconfig" "$HOME/.gitconfig"
   copy_file "$DIR/../git/.gitignore" "$HOME/.gitignore"
@@ -141,7 +141,7 @@ setup_brew() {
   log "Homebrew settings configured successfully!"
 }
 
-# NPM Settings
+# Configure NPM
 setup_npm() {
   copy_file "$DIR/../.npmrc" "$HOME/.npmrc"
   register_completed_step "NPM"
@@ -156,6 +156,7 @@ setup_npm() {
   fi
 }
 
+# Install global npm packages
 setup_global_npm_packages() {
   if ! command -v node >/dev/null 2>&1; then
     error "node is not installed. Please install node first."
@@ -167,7 +168,7 @@ setup_global_npm_packages() {
   log "npm packages installed successfully!"
 }
 
-# Set my favorite custom fonts
+# Configure my favorites fonts
 setup_fonts() {
   local font_dir="$HOME/.local/share/fonts"
   if [ ! -d "$font_dir" ]; then
