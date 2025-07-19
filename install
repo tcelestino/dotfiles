@@ -209,50 +209,93 @@ setup_global_npm_packages() {
   log "npm packages installed successfully!"
 }
 
-# Configure my favorites fonts
-setup_fonts() {
-  local font_dir="$HOME/.local/share/fonts"
-  if [ ! -d "$font_dir" ]; then
-    mkdir -p "$font_dir"
-  fi
-  copy_dir "$DIR/../extras/fonts" "$font_dir"
-  log "Copying fonts for Linux..."
-
-  if ! fc-cache -f -v; then
-    log "Installing Fontconfig..."
-    sudo apt update && sudo apt install fontconfig
-    log "Fontconfig installed successfully!"
+# Configure SSH
+setup_ssh() {
+  if [ -f "$HOME/.ssh/id_ed25519" ]; then
+    log "SSH key already exists. Skipping..."
+    return
   fi
 
-  log "Fontcaching..."
-  fc-cache -f -v
-  log "Fontcaching done!"
+  log "Generating SSH key..."
+  ssh-keygen -t ed25519 -C $USER_EMAIL
+  log "SSH key generated successfully!"
 
-  register_completed_step "Fonts"
-  log "Fonts configured successfully!"
+  log "Adding SSH agent in background..."
+  eval "$(ssh-agent -s)"
+  log "SSH agent added to the background successfully!"
+
+  log "Adding SSH key to the ssh-agent..."
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+  else
+    ssh-add ~/.ssh/id_ed25519
+  fi
+  log "SSH key added to the ssh-agent successfully!"
+
+  log "Adding SSH config..."
+  copy_file "$DIR/../ssh/config" "$HOME/.ssh/config"
+  log "SSH config added successfully!"
+
+  register_completed_step "ssh"
+  log "SSH configured successfully!"
 }
 
+# Configure my favorites fonts
+setup_fonts() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    local font_dir="$HOME/Library/Fonts"
+    if [ ! -d "$font_dir" ]; then
+      mkdir -p "$font_dir"
+    fi
+    log "Installing fonts for macOS..."
+    copy_dir "$DIR/extras/fonts/"* "$font_dir/"
+    log "Fonts installed successfully!"
+  elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Ubuntu/Linux
+    local font_dir="$HOME/.local/share/fonts"
+    if [ ! -d "$font_dir" ]; then
+      mkdir -p "$font_dir"
+    fi
+    log "Installing fonts for Linux..."
+    copy_dir "$DIR/extras/fonts/"* "$font_dir/"
+
+    if ! fc-cache -f -v; then
+      log "Installing Fontconfig..."
+      sudo apt update && sudo apt install fontconfig
+      log "Fontconfig installed successfully!"
+    fi
+
+    log "Fontcaching..."
+    fc-cache -f -v
+    log "Fontcaching done!"
+
+    register_completed_step "Fonts"
+    log "Fonts configured successfully!"
+  else
+    error "Unsupported operating system"
+  fi
+}
+
+# Configure macOS
 setup_macos() {
   log "Settings for macOS"
 
-  if [[ -x "$DIR/macos/install" ]]; then
-    "$DIR/macos/install"
+  if [[ -x "$DIR/macos/.macos" ]]; then
+    sh "$DIR/macos/.macos"
     register_completed_step "macOS"
     log "macOS settings configured successfully!"
+
+    copy_file "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config" # Configure duti (macOS default application manager) settings
   else
-    error "$DIR/macos/install not found or not executable."
+    error "$DIR/macos/.macos not found or not executable."
   fi
 }
-
 
 ask_continue() {
   local message="$1"
   local step="$2"
   echo -e "\n${GREEN}[INFO]${NC} Step $step: $message"
-  echo -e "${GREEN}[INFO]${NC} Options:"
-  echo -e "  ${GREEN}[Y]${NC} - Yes, continue (default)"
-  echo -e "  ${GREEN}[n]${NC} - No, skip this step"
-  echo -e "  ${GREEN}[q]${NC} - Exit installation"
   read -p "Your choice (Y/n/q): " response
 
   if [ -z "$response" ]; then
@@ -287,9 +330,11 @@ main() {
   echo "3. Configure Git"
   echo "4. Configure NPM"
   echo "5. Install global npm packages"
-  echo "6. Configure the fonts"
+  echo "6. Configure SSH"
+  echo "7. Set custom fonts"
+
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo "7. Settings for macOS"
+    echo "8. Settings for macOS"
   fi
 
   if ask_continue "Configure Zsh" "1"; then
@@ -312,12 +357,16 @@ main() {
     setup_global_npm_packages
   fi
 
-  if ask_continue "Configure the fonts" "6"; then
+  if ask_continue "Configure SSH" "6"; then
+    setup_ssh
+  fi
+
+  if ask_continue "Set custom fonts" "7"; then
     setup_fonts
   fi
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    if ask_continue "Settings for macOS" "7"; then
+    if ask_continue "Settings for macOS" "8"; then
       setup_macos
     fi
   fi
