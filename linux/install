@@ -221,10 +221,14 @@ ask_continue() {
   local step="$2"
   echo -e "\n${GREEN}[INFO]${NC} Step $step: $message"
   echo -e "${GREEN}[INFO]${NC} Options:"
-  echo -e "  ${GREEN}[y]${NC} - Yes, continue"
+  echo -e "  ${GREEN}[Y]${NC} - Yes, continue (default)"
   echo -e "  ${GREEN}[n]${NC} - No, skip this step"
   echo -e "  ${GREEN}[q]${NC} - Exit installation"
-  read -p "Your choice (y/n/q): " response
+  read -p "Your choice (Y/n/q): " response
+
+  if [ -z "$response" ]; then
+    response="y"
+  fi
 
   case "$response" in
     [Yy]*)
