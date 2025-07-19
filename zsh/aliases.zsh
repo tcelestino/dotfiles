@@ -56,7 +56,7 @@ alias dcl="docker-compose logs" #logs with docker-compose
 alias dcdp="docker-compose -f docker-compose.dependencies.yaml up -d" #start dependencies with docker-compose
 
 # utils
-alias fs="stat -c "%s bytes""
+alias fs=filesize
 alias chmox="chmod -x"
 alias where=which
 alias killnode="killall -9 node"

@@ -83,3 +83,13 @@ function workFolder() {
   fi
 }
 
+# show the size of a file or directory on macos and linux
+function filesize() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    stat -f "%z bytes" "$@"
+  else
+    # Linux
+    stat -c "%s bytes" "$@"
+  fi
+}
