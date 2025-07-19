@@ -11,7 +11,6 @@ You need to have the following tools installed:
 - [zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
 - [oh-my-zsh](https://ohmyz.sh/#install)
 - [Homebrew](https://brew.sh/)
-- [Git](https://git-scm.com/)
 - [Node.js](https://nodejs.org/en/download)
 
 ## How to use
@@ -24,7 +23,33 @@ git clone git@github.com:tcelestino/dotfiles.git && cd dotfiles
 
 2. Open `.zshrc` file and change variables `USER_NAME`, `USER_EMAIL` and `NPM_SCOPE`. You might set `GH_TOKEN` and `NPM_TOKEN` too.
 
-3. Choose your OS and run the install script: `macos` or `linux`:
+3. Install Homebrew:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+4. Install zsh:
+
+```bash
+## linux
+sudo apt update && sudo apt install zsh
+```
+
+```bash
+## macos
+brew install zsh
+```
+
+5. Install oh-my-zsh:
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+6. Install Node.js: [https://nodejs.org/en/download](https://nodejs.org/en/download)
+
+7. Choose your OS and run the install script: `macos` or `linux`:
 
 ```bash
 # macos
