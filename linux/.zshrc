@@ -19,7 +19,7 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export GH_TOKEN="" # create token at https://github.com/settings/apps select "Personal access tokens"
 
 # ssh
-export SSH_KEY_PATH="~/.ssh/id_ed25519"
+export SSH_KEY_PATH=$HOME/.ssh/id_ed25519
 
 # node and npm
 export NODE_ENV="development"
@@ -47,7 +47,7 @@ ZSH_WEB_SEARCH_ENGINES=(
 . "$HOME/.deno/env"
 
 # homebrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$($HOME/.linuxbrew/bin/brew shellenv)"
 
 source $ZSH/oh-my-zsh.sh
 
