@@ -48,12 +48,12 @@ alias docker-ch="export DOCKER_HOST="
 
 # docker-compose
 alias dcu="docker-compose up" #start with docker-compose
+alias dcud="docker-compose -f docker-compose.dependencies.yaml up -d" #start dependencies with docker-compose
 alias dcd="docker-compose down" #stop with docker-compose
 alias dcdv="docker-compose down -v" #stop with docker-compose and remove volumes
 alias dcr="docker-compose restart" #restart with docker-compose
 alias dcb="docker-compose build" #build with docker-compose
 alias dcl="docker-compose logs" #logs with docker-compose
-alias dcdp="docker-compose -f docker-compose.dependencies.yaml up -d" #start dependencies with docker-compose
 
 # utils
 alias fs=filesize
