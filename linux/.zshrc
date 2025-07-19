@@ -2,7 +2,7 @@ export ZSH=$HOME/.oh-my-zsh
 
 ZSH_THEME="dracula"
 
-plugins=(brew copypath copyfile custom-functions deno docker docker-compose extract git history npm python vscode web-search yarn)
+plugins=(brew copypath copyfile custom-functions deno docker docker-compose extract git history npm python ubuntu vscode web-search yarn)
 
 # global
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
