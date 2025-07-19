@@ -181,20 +181,20 @@ install_deno() {
 
 # Configure Git settings
 setup_git() {
-  copy_file "$DIR/git/.gitconfig" "$HOME/.gitconfig"
-  copy_file "$DIR/git/.gitignore" "$HOME/.gitignore"
-  copy_file "$DIR/git/.gitattributes" "$HOME/.gitattributes"
-  copy_file "$DIR/git/.git-commit-template" "$HOME/.git-commit-template"
+  copy_file "$DIR/../git/.gitconfig" "$HOME/.gitconfig"
+  copy_file "$DIR/../git/.gitignore" "$HOME/.gitignore"
+  copy_file "$DIR/../git/.gitattributes" "$HOME/.gitattributes"
+  copy_file "$DIR/../git/.git-commit-template" "$HOME/.git-commit-template"
   register_completed_step "Git"
   log "Git configured successfully!"
 }
 
 # Configure Zsh settings
 setup_zsh() {
-  copy_file "$DIR/linux/.zshrc" "$HOME/.zshrc"
-  copy_dir "$DIR/zsh/themes" "$HOME/.oh-my-zsh/themes"
-  copy_file "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
-  copy_dir "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
+  copy_file "$DIR/.zshrc" "$HOME/.zshrc"
+  copy_dir "$DIR/../zsh/themes" "$HOME/.oh-my-zsh/themes"
+  copy_file "$DIR/../zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+  copy_dir "$DIR/../zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
 
   register_completed_step "Zsh"
   log "Zsh configured successfully!"
@@ -202,7 +202,7 @@ setup_zsh() {
 
 # Configure Homebrew and install packages from Brewfile
 setup_brew() {
-  copy_file "$DIR/linux/Brewfile" "$HOME/Brewfile"
+  copy_file "$DIR/Brewfile" "$HOME/Brewfile"
   log "Executing brew bundle install..."
   if ! brew bundle install; then
       error "Brew bundle install failed"
@@ -213,7 +213,7 @@ setup_brew() {
 
 # NPM Settings
 setup_npm() {
-  copy_file "$DIR/.npmrc" "$HOME/.npmrc"
+  copy_file "$DIR/../.npmrc" "$HOME/.npmrc"
   register_completed_step "NPM"
   log "NPM configured successfully!"
 
@@ -232,7 +232,7 @@ setup_fonts() {
   if [ ! -d "$font_dir" ]; then
     mkdir -p "$font_dir"
   fi
-  copy_dir "$DIR/extras/fonts" "$font_dir"
+  copy_dir "$DIR/../extras/fonts" "$font_dir"
   log "Installing fonts for Linux..."
   fc-cache -f -v
 
