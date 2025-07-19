@@ -1,0 +1,306 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+# Get current location
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Array to store completed steps
+declare -a completed_steps=()
+
+# Register a completed step
+# @param $1 Step name
+register_completed_step() {
+  local step="$1"
+  completed_steps+=("$step")
+}
+
+# Print info messages
+# @param $1 Message
+log() {
+  echo -e "${GREEN}[INFO]${NC} $1"
+}
+
+# Print error messages in red and exit
+# @param $1 Message
+error() {
+  echo -e "${RED}[ERROR]${NC} $1"
+  exit 1
+}
+
+# Create a symbolic link
+# @param $1 Source file path
+# @param $2 Destination link path
+safe_link() {
+  local src="$1"
+  local dest="$2"
+
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+      log "Found $dest - removing..."
+      rm -f "$dest"
+  fi
+
+  if [ ! -e "$src" ]; then
+      error "Source file $src does not exist!"
+  fi
+
+  log "Linking $dest to $src"
+  ln -s "$src" "$dest"
+}
+
+# Copy a directory
+# @param $1 Source directory path
+# @param $2 Destination directory path
+copy_dir() {
+    local src="$1"
+    local dest="$2"
+
+    if [ ! -d "$src" ]; then
+        error "Source directory $src does not exist!"
+    fi
+
+    if [ -d "$dest" ]; then
+        log "Found $dest - renaming..."
+        mv "$dest" "$dest.old"
+    fi
+
+    log "Copying directory $src to $dest"
+    if ! cp -R "$src" "$dest"; then
+        error "Failed to copy directory $src to $dest"
+    fi
+}
+
+# Copy a file
+# @param $1 Source file path
+# @param $2 Destination file path
+copy_file() {
+  local src="$1"
+  local dest="$2"
+
+  if [ ! -f "$src" ]; then
+    error "Source file $src does not exist!"
+  fi
+
+  if [ -f "$dest" ]; then
+    log "Found $dest - renaming..."
+    mv "$dest" "$dest.old"
+  fi
+
+  log "Copying file $src to $dest"
+  if ! cp "$src" "$dest"; then
+    error "Failed to copy file $src to $dest"
+  fi
+}
+
+# Configure zsh
+setup_zsh() {
+  if ! command -v zsh >/dev/null 2>&1 && ! [ -d "$HOME/.oh-my-zsh" ]; then
+    error "zsh and oh-my-zsh are not installed. Please install both before continuing."
+  elif ! command -v zsh >/dev/null 2>&1; then
+    error "zsh is not installed. Please install zsh before continuing."
+  elif ! [ -d "$HOME/.oh-my-zsh" ]; then
+    error "oh-my-zsh is not installed. Please install oh-my-zsh before continuing."
+  fi
+
+  if command -v zsh >/dev/null 2>&1 && [ -d "$HOME/.oh-my-zsh" ]; then
+    log "zsh already configured. Skipping..."
+    return
+  fi
+
+  # copy zshrc based on the OS
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    log "Copying zshrc for macOS..."
+    copy_file "$DIR/macos/.zshrc" "$HOME/.zshrc"
+  else
+    log "Copying zshrc for Linux..."
+    copy_file "$DIR/linux/.zshrc" "$HOME/.zshrc"
+  fi
+
+  copy_dir "$DIR/../zsh/themes" "$HOME/.oh-my-zsh/themes"
+  copy_file "$DIR/../zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+  copy_dir "$DIR/../zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
+
+  register_completed_step "zsh"
+  log "zsh settings configured successfully!"
+}
+
+# Configure Git
+setup_git() {
+  if [ -f "$HOME/.gitconfig" ] && [ -f "$HOME/.gitignore" ] && [ -f "$HOME/.gitattributes" ] && [ -f "$HOME/.git-commit-template" ]; then
+    log "git already configured. Skipping..."
+    return
+  fi
+
+  copy_file "$DIR/../git/.gitconfig" "$HOME/.gitconfig"
+  copy_file "$DIR/../git/.gitignore" "$HOME/.gitignore"
+  copy_file "$DIR/../git/.gitattributes" "$HOME/.gitattributes"
+  copy_file "$DIR/../git/.git-commit-template" "$HOME/.git-commit-template"
+  register_completed_step "Git"
+  log "Git settings configured successfully!"
+}
+
+# Configure Homebrew and install packages from Brewfile
+setup_brew() {
+  if ! command -v brew >/dev/null 2>&1; then
+    error "Homebrew is not installed. Please install Homebrew first."
+  fi
+
+  if command -v brew >/dev/null 2>&1; then
+    log "Brewfile already exists. Skipping..."
+    return
+  fi
+
+  # copy Brewfile based on the OS
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    log "Copying Brewfile for macOS..."
+    copy_file "$DIR/macos/Brewfile" "$HOME/Brewfile"
+  else
+    log "Copying Brewfile for Linux..."
+    copy_file "$DIR/linux/Brewfile" "$HOME/Brewfile"
+  fi
+
+  log "Executing brew bundle install..."
+  if ! brew bundle install; then
+      error "Brew bundle install failed"
+  fi
+  register_completed_step "Homebrew"
+  log "Homebrew settings configured successfully!"
+}
+
+# Configure NPM
+setup_npm() {
+  if [ -f "$HOME/.npmrc" ] || [ -d "$HOME/.npm-packages" ]; then
+    log "npm already configured. Skipping..."
+    return
+  fi
+
+  copy_file "$DIR/../.npmrc" "$HOME/.npmrc"
+  register_completed_step "NPM"
+  log "NPM configured successfully!"
+
+  # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
+  if [ -d "$HOME/.npm-packages" ]; then
+    log ".npm-packages folder exists"
+    return
+  else
+    mkdir -p "$HOME/.npm-packages"
+  fi
+}
+
+# Install global npm packages
+setup_global_npm_packages() {
+  if ! command -v node >/dev/null 2>&1; then
+    error "node is not installed. Please install node first."
+  fi
+
+  if command -v n >/dev/null 2>&1; then
+    log "global npm packages already installed. Skipping..."
+    return
+  fi
+
+  log "Installing global npm packages..."
+  npm install -g npm-check-updates n git-cz @nestjs/cli fastify-cli yarn
+  register_completed_step "npm packages"
+  log "npm packages installed successfully!"
+}
+
+# Configure my favorites fonts
+setup_fonts() {
+  local font_dir="$HOME/.local/share/fonts"
+  if [ ! -d "$font_dir" ]; then
+    mkdir -p "$font_dir"
+  fi
+  copy_dir "$DIR/../extras/fonts" "$font_dir"
+  log "Copying fonts for Linux..."
+
+  if ! fc-cache -f -v; then
+    log "Installing Fontconfig..."
+    sudo apt update && sudo apt install fontconfig
+    log "Fontconfig installed successfully!"
+  fi
+
+  log "Fontcaching..."
+  fc-cache -f -v
+  log "Fontcaching done!"
+
+  register_completed_step "Fonts"
+  log "Fonts configured successfully!"
+}
+
+ask_continue() {
+  local message="$1"
+  local step="$2"
+  echo -e "\n${GREEN}[INFO]${NC} Step $step: $message"
+  echo -e "${GREEN}[INFO]${NC} Options:"
+  echo -e "  ${GREEN}[Y]${NC} - Yes, continue (default)"
+  echo -e "  ${GREEN}[n]${NC} - No, skip this step"
+  echo -e "  ${GREEN}[q]${NC} - Exit installation"
+  read -p "Your choice (Y/n/q): " response
+
+  if [ -z "$response" ]; then
+    response="y"
+  fi
+
+  case "$response" in
+    [Yy]*)
+      return 0
+      ;;
+    [Nn]*)
+      log "Step $step skipped."
+      return 1
+      ;;
+    [Qq]*)
+      log "Installation interrupted by user."
+      exit 0
+      ;;
+    *)
+      log "Invalid option. Please try again."
+      ask_continue "$message" "$step"
+      ;;
+  esac
+}
+
+main() {
+  log "Starting installation from $DIR..."
+  log "This script will configure your environment with the following steps:"
+
+  echo "1. Configure Zsh"
+  echo "2. Configure Homebrew and install packages"
+  echo "3. Configure Git"
+  echo "4. Configure NPM"
+  echo "5. Install global npm packages"
+  echo "6. Configure the fonts"
+
+  if ask_continue "Configure Zsh" "1"; then
+    setup_zsh
+  fi
+
+  if ask_continue "Configure Homebrew and install packages" "2"; then
+    setup_brew
+  fi
+
+  if ask_continue "Configure Git" "3"; then
+    setup_git
+  fi
+
+  if ask_continue "Configure NPM" "4"; then
+    setup_npm
+  fi
+
+  if ask_continue "Install global npm packages" "5"; then
+    setup_global_npm_packages
+  fi
+
+  if ask_continue "Configure the fonts" "6"; then
+    setup_fonts
+  fi
+
+  log "Configurations completed successfully! 🎉"
+}
+
+main "$@"
