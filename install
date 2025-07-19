@@ -99,16 +99,12 @@ copy_file() {
 
 # Configure zsh
 setup_zsh() {
-  if ! command -v zsh >/dev/null 2>&1 && ! [ -d "$HOME/.oh-my-zsh" ]; then
-    error "zsh and oh-my-zsh are not installed. Please install both before continuing."
-  elif ! command -v zsh >/dev/null 2>&1; then
+  if ! command -v zsh >/dev/null 2>&1; then
     error "zsh is not installed. Please install zsh before continuing."
-  elif ! [ -d "$HOME/.oh-my-zsh" ]; then
-    error "oh-my-zsh is not installed. Please install oh-my-zsh before continuing."
   fi
 
   if [ -d "$HOME/.oh-my-zsh" ]; then
-    log "zsh already configured. Skipping..."
+    log "oh-my-zsh already configured. Skipping..."
     return
   fi
 
