@@ -232,6 +232,19 @@ setup_fonts() {
   log "Fonts configured successfully!"
 }
 
+setup_macos() {
+  log "Settings for macOS"
+
+  if [[ -x "$DIR/macos/install" ]]; then
+    "$DIR/macos/install"
+    register_completed_step "macOS"
+    log "macOS settings configured successfully!"
+  else
+    error "$DIR/macos/install not found or not executable."
+  fi
+}
+
+
 ask_continue() {
   local message="$1"
   local step="$2"
@@ -275,6 +288,9 @@ main() {
   echo "4. Configure NPM"
   echo "5. Install global npm packages"
   echo "6. Configure the fonts"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "7. Settings for macOS"
+  fi
 
   if ask_continue "Configure Zsh" "1"; then
     setup_zsh
@@ -298,6 +314,12 @@ main() {
 
   if ask_continue "Configure the fonts" "6"; then
     setup_fonts
+  fi
+
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    if ask_continue "Settings for macOS" "7"; then
+      setup_macos
+    fi
   fi
 
   log "Configurations completed successfully! 🎉"
