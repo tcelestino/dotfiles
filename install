@@ -107,7 +107,7 @@ setup_zsh() {
     error "oh-my-zsh is not installed. Please install oh-my-zsh before continuing."
   fi
 
-  if command -v zsh >/dev/null 2>&1 && [ -d "$HOME/.oh-my-zsh" ]; then
+  if [ -d "$HOME/.oh-my-zsh" ]; then
     log "zsh already configured. Skipping..."
     return
   fi
@@ -136,10 +136,10 @@ setup_git() {
     return
   fi
 
-  copy_file "$DIR/../git/.gitconfig" "$HOME/.gitconfig"
-  copy_file "$DIR/../git/.gitignore" "$HOME/.gitignore"
-  copy_file "$DIR/../git/.gitattributes" "$HOME/.gitattributes"
-  copy_file "$DIR/../git/.git-commit-template" "$HOME/.git-commit-template"
+  copy_file "$DIR/git/.gitconfig" "$HOME/.gitconfig"
+  copy_file "$DIR/git/.gitignore" "$HOME/.gitignore"
+  copy_file "$DIR/git/.gitattributes" "$HOME/.gitattributes"
+  copy_file "$DIR/git/.git-commit-template" "$HOME/.git-commit-template"
   register_completed_step "Git"
   log "Git settings configured successfully!"
 }
@@ -179,7 +179,7 @@ setup_npm() {
     return
   fi
 
-  copy_file "$DIR/../.npmrc" "$HOME/.npmrc"
+  copy_file "$DIR/.npmrc" "$HOME/.npmrc"
   register_completed_step "NPM"
   log "NPM configured successfully!"
 
@@ -233,7 +233,7 @@ setup_ssh() {
   log "SSH key added to the ssh-agent successfully!"
 
   log "Adding SSH config..."
-  copy_file "$DIR/../ssh/config" "$HOME/.ssh/config"
+  copy_file "$DIR/ssh/config" "$HOME/.ssh/config"
   log "SSH config added successfully!"
 
   register_completed_step "ssh"
