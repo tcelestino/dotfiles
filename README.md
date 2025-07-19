@@ -4,6 +4,16 @@ This is my dotfiles for personal app configs and customizations. I mainly use zs
 
 This repo is 100% open for you to explore and customize.
 
+## Requirements
+
+You need to have the following tools installed:
+
+- [zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
+- [oh-my-zsh](https://ohmyz.sh/#install)
+- [Homebrew](https://brew.sh/)
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/en/download)
+
 ## How to use
 
 1. Clone this repository and open folder `dotfiles`:
