@@ -107,6 +107,11 @@ setup_zsh() {
     error "oh-my-zsh is not installed. Please install oh-my-zsh before continuing."
   fi
 
+  if command -v zsh >/dev/null 2>&1 && [ -d "$HOME/.oh-my-zsh" ]; then
+    log "zsh already configured. Skipping..."
+    return
+  fi
+
   copy_file "$DIR/.zshrc" "$HOME/.zshrc"
   copy_dir "$DIR/../zsh/themes" "$HOME/.oh-my-zsh/themes"
   copy_file "$DIR/../zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
@@ -118,6 +123,11 @@ setup_zsh() {
 
 # Configure Git
 setup_git() {
+  if [ -f "$HOME/.gitconfig" ] && [ -f "$HOME/.gitignore" ] && [ -f "$HOME/.gitattributes" ] && [ -f "$HOME/.git-commit-template" ]; then
+    log "git already configured. Skipping..."
+    return
+  fi
+
   copy_file "$DIR/../git/.gitconfig" "$HOME/.gitconfig"
   copy_file "$DIR/../git/.gitignore" "$HOME/.gitignore"
   copy_file "$DIR/../git/.gitattributes" "$HOME/.gitattributes"
@@ -132,6 +142,11 @@ setup_brew() {
     error "Homebrew is not installed. Please install Homebrew first."
   fi
 
+  if command -v brew >/dev/null 2>&1; then
+    log "Brewfile already exists. Skipping..."
+    return
+  fi
+
   copy_file "$DIR/Brewfile" "$HOME/Brewfile"
   log "Executing brew bundle install..."
   if ! brew bundle install; then
@@ -143,6 +158,11 @@ setup_brew() {
 
 # Configure NPM
 setup_npm() {
+  if [ -f "$HOME/.npmrc" ] || [ -d "$HOME/.npm-packages" ]; then
+    log "npm already configured. Skipping..."
+    return
+  fi
+
   copy_file "$DIR/../.npmrc" "$HOME/.npmrc"
   register_completed_step "NPM"
   log "NPM configured successfully!"
@@ -160,6 +180,11 @@ setup_npm() {
 setup_global_npm_packages() {
   if ! command -v node >/dev/null 2>&1; then
     error "node is not installed. Please install node first."
+  fi
+
+  if command -v n >/dev/null 2>&1; then
+    log "global npm packages already installed. Skipping..."
+    return
   fi
 
   log "Installing global npm packages..."
