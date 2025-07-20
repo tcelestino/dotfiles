@@ -327,10 +327,10 @@ main() {
   echo "4. Configure NPM"
   echo "5. Install global npm packages"
   echo "6. Configure SSH"
-  echo "7. Set custom fonts"
+  # echo "7. Set custom fonts"
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo "8. Settings for macOS"
+    echo "7. Settings for macOS"
   fi
 
   if ask_continue "Configure Zsh" "1"; then
@@ -357,12 +357,12 @@ main() {
     setup_ssh
   fi
 
-  if ask_continue "Set custom fonts" "7"; then
-    setup_fonts
-  fi
+  # if ask_continue "Set custom fonts" "7"; then
+  #   setup_fonts
+  # fi
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    if ask_continue "Settings for macOS" "8"; then
+    if ask_continue "Settings for macOS" "7"; then
       setup_macos
     fi
   fi
