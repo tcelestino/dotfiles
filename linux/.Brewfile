@@ -1,8 +1,6 @@
 tap "homebrew/bundle"
 tap "espanso/espanso"
 tap "localsend/localsend"
-# Run your GitHub Actions locally
-brew "act"
 # TIFF library and utilities
 brew "libtiff"
 # Cryptography and SSL/TLS Toolkit
@@ -11,8 +9,6 @@ brew "openssl@3"
 brew "sqlite"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.13"
-# New file format for still image compression
-brew "jpeg-xl"
 # Core application library for C
 brew "glib"
 # Asynchronous DNS library

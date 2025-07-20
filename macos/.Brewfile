@@ -1,17 +1,11 @@
 tap "espanso/espanso"
-tap "homebrew/bundle"
-tap "homebrew/services"
 tap "localsend/localsend"
-# Run your GitHub Actions locally
-brew "act"
 # General-purpose data compression with high compression ratio
 brew "xz"
 # Zstandard is a real-time compression algorithm
 brew "zstd"
 # TIFF library and utilities
 brew "libtiff"
-# New file format for still image compression
-brew "jpeg-xl"
 # Asynchronous DNS library
 brew "c-ares"
 # Multi-platform support library with a focus on asynchronous I/O
@@ -76,8 +70,6 @@ cask "bitwarden"
 cask "espanso"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
-# Testing client for REST, GraphQL, and HTTP APIs
-cask "httpie-desktop"
 # Utility that shows the latest app updates
 cask "latest"
 # Open-source cross-platform alternative to AirDrop
