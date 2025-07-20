@@ -13,6 +13,7 @@ My dev tools for macOS and Linux
 | MongoDB Compass  | Database management tool                       | [https://www.mongodb.com/products/compass](https://www.mongodb.com/products/compass) |
 | Node.js          | JavaScript runtime for application development | [https://nodejs.org/](https://nodejs.org/)                                           |
 | OrbStack         | Docker manager                                 | [https://orbstack.com/](https://orbstack.com/)                                       |
+| Redis            | Database                                       | [https://redis.io/](https://redis.io/)                                               |
 | VSCode           | Code editor                                    | [https://code.visualstudio.com/](https://code.visualstudio.com/)                     |
 | Yaak             | API client                                     | [https://yaak.app/](https://yaak.app/)                                               |
 | Yarn             | Fast and reliable package manager for Node.js  | [https://yarnpkg.com/](https://yarnpkg.com/)                                         |
