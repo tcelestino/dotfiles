@@ -5,8 +5,9 @@ alias reload="omz reload"
 alias custom-alias="$EDITOR ~/.oh-my-zsh/custom/aliases.zsh"
 
 # local development
-alias server="python3 -m http.server"
+alias server="python -m SimpleHTTPServer"
 alias serveo="ssh -R 80:localhost:3000 serveo.net"
+alias redis-start="/opt/homebrew/opt/redis/bin/redis-server /opt/homebrew/etc/redis.conf" #start redis
 
 # https://paulbrowne.xyz/https-localhost
 alias https-server="http-server --ssl --cert ~/.ssl/localhost.crt --key ~/.ssl/localhost.key -a localhost -o"
