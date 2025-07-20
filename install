@@ -53,8 +53,6 @@ safe_link() {
   ln -s "$src" "$dest"
 }
 
-DOTFILES_ZSH_INSTALL=false
-
 # Copy a directory
 # @param $1 Source directory path
 # @param $2 Destination directory path
@@ -105,15 +103,10 @@ setup_zsh() {
     error "zsh is not installed. Please install zsh before continuing."
   fi
 
-  if [ "$DOTFILES_ZSH_INSTALL" = true ]; then
-    log "oh-my-zsh already installed. Skipping..."
+  if [ "$DOTFILES_ZSH_SETUP" = true ]; then
+    log "oh-my-zsh already setup. Skipping..."
     return
   fi
-
-  # if [ -d "$HOME/.oh-my-zsh" ]; then
-  #   log "oh-my-zsh already configured. Skipping..."
-  #   return
-  # fi
 
   # copy zshrc based on the OS
   if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -131,13 +124,13 @@ setup_zsh() {
   register_completed_step "zsh"
   log "zsh settings configured successfully!"
 
-  DOTFILES_ZSH_INSTALL=true
+  DOTFILES_ZSH_SETUP=true
 }
 
 # Configure Git
 setup_git() {
-  if [ -f "$HOME/.gitconfig" ] && [ -f "$HOME/.gitignore" ] && [ -f "$HOME/.gitattributes" ] && [ -f "$HOME/.git-commit-template" ]; then
-    log "git already configured. Skipping..."
+  if [ "$DOTFILES_GIT_SETUP" = true ]; then
+    log "git already setup. Skipping..."
     return
   fi
 
@@ -147,6 +140,8 @@ setup_git() {
   copy_file "$DIR/git/.git-commit-template" "$HOME/.git-commit-template"
   register_completed_step "Git"
   log "Git settings configured successfully!"
+
+  DOTFILES_GIT_SETUP=true
 }
 
 # Configure Homebrew and install packages from Brewfile
@@ -155,8 +150,8 @@ setup_brew() {
     error "Homebrew is not installed. Please install Homebrew first."
   fi
 
-  if command -v brew >/dev/null 2>&1; then
-    log "Brewfile already exists. Skipping..."
+  if [ "$DOTFILES_BREW_SETUP" = true ]; then
+    log "Brewfile already setup. Skipping..."
     return
   fi
 
@@ -175,12 +170,14 @@ setup_brew() {
   fi
   register_completed_step "Homebrew"
   log "Homebrew settings configured successfully!"
+
+  DOTFILES_BREW_SETUP=true
 }
 
 # Configure NPM
 setup_npm() {
-  if [ -f "$HOME/.npmrc" ] || [ -d "$HOME/.npm-packages" ]; then
-    log "npm already configured. Skipping..."
+  if [ "$DOTFILES_NPM_SETUP" = true ]; then
+    log "npm already setup. Skipping..."
     return
   fi
 
@@ -195,6 +192,8 @@ setup_npm() {
   else
     mkdir -p "$HOME/.npm-packages"
   fi
+
+  DOTFILES_NPM_SETUP=true
 }
 
 # Install global npm packages
@@ -203,8 +202,8 @@ setup_global_npm_packages() {
     error "node is not installed. Please install node first."
   fi
 
-  if command -v n >/dev/null 2>&1; then
-    log "global npm packages already installed. Skipping..."
+  if [ "$DOTFILES_NPM_SETUP" = true ]; then
+    log "global npm packages already setup. Skipping..."
     return
   fi
 
@@ -212,12 +211,19 @@ setup_global_npm_packages() {
   npm install -g npm-check-updates n git-cz @nestjs/cli fastify-cli yarn
   register_completed_step "npm packages"
   log "npm packages installed successfully!"
+
+  DOTFILES_NPM_SETUP=true
 }
 
 # Configure SSH
 setup_ssh() {
   if [ -f "$HOME/.ssh/id_ed25519" ]; then
     log "SSH key already exists. Skipping..."
+    return
+  fi
+
+  if [ "$DOTFILES_SSH_SETUP" = true ]; then
+    log "SSH already setup. Skipping..."
     return
   fi
 
@@ -243,10 +249,17 @@ setup_ssh() {
 
   register_completed_step "ssh"
   log "SSH configured successfully!"
+
+  DOTFILES_SSH_SETUP=true
 }
 
 # Configure my favorites fonts
 setup_fonts() {
+  if [ "$DOTFILES_FONTS_SETUP" = true ]; then
+    log "fonts already setup. Skipping..."
+    return
+  fi
+
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
     local font_dir="$HOME/Library/Fonts"
@@ -256,6 +269,8 @@ setup_fonts() {
     log "Installing fonts for macOS..."
     copy_dir "$DIR/extras/fonts/"* "$font_dir/"
     log "Fonts installed successfully!"
+
+    DOTFILES_FONTS_SETUP=true
   elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # Ubuntu/Linux
     local font_dir="$HOME/.local/share/fonts"
@@ -277,6 +292,8 @@ setup_fonts() {
 
     register_completed_step "Fonts"
     log "Fonts configured successfully!"
+
+    DOTFILES_FONTS_SETUP=true
   else
     error "Unsupported operating system"
   fi
@@ -284,6 +301,11 @@ setup_fonts() {
 
 # Configure macOS
 setup_macos() {
+  if [ "$DOTFILES_MACOS_SETUP" = true ]; then
+    log "macOS already setup. Skipping..."
+    return
+  fi
+
   log "Settings for macOS"
 
   if [[ -x "$DIR/macos/.macos" ]]; then
@@ -295,6 +317,8 @@ setup_macos() {
   else
     error "$DIR/macos/.macos not found or not executable."
   fi
+
+  DOTFILES_MACOS_SETUP=true
 }
 
 ask_continue() {
