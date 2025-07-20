@@ -8,29 +8,29 @@ This repo is 100% open for you to explore and customize.
 
 You need to have the following tools installed:
 
-- [git](https://git-scm.com/downloads)
+- [Homebrew](https://brew.sh/)
 - [zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
 - [oh-my-zsh](https://ohmyz.sh/#install)
-- [Homebrew](https://brew.sh/)
-- [Node.js](https://nodejs.org/en/download)
+- [git](https://git-scm.com/downloads)
 
 ## How to use
 
-1. Clone this repository and open folder `dotfiles`:
-
-```bash
-git clone git@github.com:tcelestino/dotfiles.git && cd dotfiles
-```
-
-2. Open `.zshrc` file and change variables `USER_NAME`, `USER_EMAIL` and `NPM_SCOPE`. You might set `GH_TOKEN` and `NPM_TOKEN` too.
-
-3. Install Homebrew:
+1. Install Homebrew:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-4. Install zsh:
+2. Clone this repository and open folder `dotfiles`:
+
+```bash
+git clone git@github.com:tcelestino/dotfiles.git && cd dotfiles
+```
+
+3. Open `.zshrc` file and change variables `USER_NAME`, `USER_EMAIL` and `NPM_SCOPE`. You might set `GH_TOKEN` and `NPM_TOKEN` too.
+4. Set your email and name for git on `.gitconfig` file.
+
+5. Install zsh (if you not have it installed):
 
 ```bash
 ## linux
@@ -42,21 +42,19 @@ sudo apt update && sudo apt install zsh
 brew install zsh
 ```
 
-5. Install oh-my-zsh:
+_zsh is default shell on latest versions of macOS_
+
+6. Install oh-my-zsh:
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-6. Run the install script:
+7. Run the install script:
 
 ```bash
 ./install
 ```
-
-## Some settings
-
-- Set name and email for git on `.gitconfig` file
 
 ## Apps and dev tools
 
