@@ -48,13 +48,15 @@ brew install zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-6. Install Node.js: [https://nodejs.org/en/download](https://nodejs.org/en/download)
-
-7. Run the install script:
+6. Run the install script:
 
 ```bash
 ./install
 ```
+
+## Some settings
+
+- Set name and email for git on `.gitconfig` file
 
 ## Apps and dev tools
 
