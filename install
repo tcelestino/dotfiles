@@ -53,6 +53,8 @@ safe_link() {
   ln -s "$src" "$dest"
 }
 
+DOTFILES_ZSH_INSTALL=false
+
 # Copy a directory
 # @param $1 Source directory path
 # @param $2 Destination directory path
@@ -103,6 +105,11 @@ setup_zsh() {
     error "zsh is not installed. Please install zsh before continuing."
   fi
 
+  if [ "$DOTFILES_ZSH_INSTALL" = true ]; then
+    log "oh-my-zsh already installed. Skipping..."
+    return
+  fi
+
   # if [ -d "$HOME/.oh-my-zsh" ]; then
   #   log "oh-my-zsh already configured. Skipping..."
   #   return
@@ -123,6 +130,8 @@ setup_zsh() {
 
   register_completed_step "zsh"
   log "zsh settings configured successfully!"
+
+  DOTFILES_ZSH_INSTALL=true
 }
 
 # Configure Git
