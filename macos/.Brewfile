@@ -86,8 +86,6 @@ cask "notunes"
 cask "numi"
 # Replacement for Docker Desktop
 cask "orbstack"
-# WebKit based web browser
-cask "orion"
 # Utility to uninstall apps and remove leftover files from old/uninstalled apps
 cask "pearcleaner"
 # Screenshot measurement and annotation tool
