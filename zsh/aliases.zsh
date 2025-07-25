@@ -50,14 +50,15 @@ alias docker-stop="docker stop $(docker ps -aq)" # stop all container
 alias docker-ch="export DOCKER_HOST="
 
 # docker-compose
-alias dcu="docker-compose up" #start with docker-compose
-alias dcdu="docker-compose -f docker-compose.dependencies.yaml up -d" #start dependencies with docker-compose
-alias dcdd="docker-compose -f docker-compose.dependencies.yaml down" #stop dependencies with docker-compose
+alias dcup="docker-compose up" #start with docker-compose
 alias dcd="docker-compose down" #stop containers
 alias dcdv="docker-compose down -v" #stop with docker-compose and remove volumes
 alias dcr="docker-compose restart" #restart containers with docker-compose
 alias dcb="docker-compose build" #build with docker-compose
-alias dcl="docker-compose logs" #logs with docker-compose
+alias dclg="docker-compose logs" #logs with docker-compose
+alias dcdpup="docker-compose -f docker-compose.dependencies.yaml up -d" #start dependencies with docker-compose
+alias dcdpd="docker-compose -f docker-compose.dependencies.yaml down" #stop dependencies with docker-compose
+alias dcdpdv="docker-compose -f docker-compose.dependencies.yaml down -v" #stop dependencies with docker-compose and remove volumes
 
 # utils
 alias fs=filesize
