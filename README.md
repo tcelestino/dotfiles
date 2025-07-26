@@ -53,7 +53,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 7. Run the install script:
 
 ```bash
-./install
+./install --ssh-email <your-email-here>
 ```
 
 ## Apps and dev tools
