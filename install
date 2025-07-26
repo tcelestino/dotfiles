@@ -5,13 +5,63 @@ set -euo pipefail
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # Get current location
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
+# Global variable for user email
+USER_EMAIL=""
+
 # Array to store completed steps
 declare -a completed_steps=()
+
+# Show usage information
+# @param $1 Exit code (optional)
+show_usage() {
+  local exit_code="${1:-0}"
+  echo "Usage: $0 --ssh-email <ssh-email>"
+  echo ""
+  echo "Options:"
+  echo "  --ssh-email    Email address for SSH key generation (required)"
+  echo "  -h, --help     Show this help message"
+  echo ""
+  echo "Example:"
+  echo "  $0 --ssh-email user@example.com"
+  exit "$exit_code"
+}
+
+# Parse command line arguments
+parse_arguments() {
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --ssh-email)
+        USER_EMAIL="$2"
+        shift 2
+        ;;
+      -h|--help)
+        show_usage 0
+        ;;
+      *)
+        echo -e "${RED}[ERROR]${NC} Unknown option: $1"
+        show_usage 1
+        ;;
+    esac
+  done
+
+  # Validate required arguments
+  if [[ -z "$USER_EMAIL" ]]; then
+    echo -e "${RED}[ERROR]${NC} Email address is required"
+    show_usage 1
+  fi
+
+  # Validate email format (basic validation)
+  if [[ ! "$USER_EMAIL" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
+    echo -e "${RED}[ERROR]${NC} Invalid email format: $USER_EMAIL"
+    exit 1
+  fi
+}
 
 # Register a completed step
 # @param $1 Step name
@@ -227,8 +277,8 @@ setup_ssh() {
     return
   fi
 
-  log "Generating SSH key..."
-  ssh-keygen -t ed25519 -C $USER_EMAIL
+  log "Generating SSH key for email: $USER_EMAIL"
+  ssh-keygen -t ed25519 -C "$USER_EMAIL"
   log "SSH key generated successfully!"
 
   log "Adding SSH agent in background..."
@@ -351,19 +401,23 @@ ask_continue() {
 }
 
 main() {
+  # Parse command line arguments first
+  parse_arguments "$@"
+
   log "Starting installation from $DIR..."
+  log "Email for SSH key: $USER_EMAIL"
   log "This script will configure your environment with the following steps:"
 
   echo "1. Configure Zsh"
   echo "2. Configure Homebrew and install packages"
   echo "3. Configure Git"
-  echo "4. Configure NPM"
-  echo "5. Install global npm packages"
-  echo "6. Configure SSH"
+  echo "4. Configure SSH"
+  echo "5. Configure NPM"
+  echo "6. Install global npm packages"
   # echo "7. Set custom fonts"
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo "7. Settings for macOS"
+    echo "7. Configure macOS"
   fi
 
   if ask_continue "Configure Zsh" "1"; then
@@ -378,16 +432,16 @@ main() {
     setup_git
   fi
 
-  if ask_continue "Configure NPM" "4"; then
+  if ask_continue "Configure SSH" "4"; then
+    setup_ssh
+  fi
+
+  if ask_continue "Configure NPM" "5"; then
     setup_npm
   fi
 
-  if ask_continue "Install global npm packages" "5"; then
+  if ask_continue "Install global npm packages" "6"; then
     setup_global_npm_packages
-  fi
-
-  if ask_continue "Configure SSH" "6"; then
-    setup_ssh
   fi
 
   # if ask_continue "Set custom fonts" "7"; then
@@ -395,7 +449,7 @@ main() {
   # fi
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    if ask_continue "Settings for macOS" "7"; then
+    if ask_continue "Configure macOS" "7"; then
       setup_macos
     fi
   fi
