@@ -12,7 +12,7 @@ NC='\033[0m'
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 # Global variable for user email
-USER_EMAIL=""
+SSH_EMAIL=""
 
 # Array to store completed steps
 declare -a completed_steps=()
@@ -37,7 +37,7 @@ parse_arguments() {
   while [[ $# -gt 0 ]]; do
     case $1 in
       --ssh-email)
-        USER_EMAIL="$2"
+        SSH_EMAIL="$2"
         shift 2
         ;;
       -h|--help)
@@ -51,14 +51,14 @@ parse_arguments() {
   done
 
   # Validate required arguments
-  if [[ -z "$USER_EMAIL" ]]; then
+  if [[ -z "$SSH_EMAIL" ]]; then
     echo -e "${RED}[ERROR]${NC} Email address is required"
     show_usage 1
   fi
 
   # Validate email format (basic validation)
-  if [[ ! "$USER_EMAIL" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
-    echo -e "${RED}[ERROR]${NC} Invalid email format: $USER_EMAIL"
+  if [[ ! "$SSH_EMAIL" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
+    echo -e "${RED}[ERROR]${NC} Invalid email format: $SSH_EMAIL"
     exit 1
   fi
 }
@@ -277,8 +277,8 @@ setup_ssh() {
     return
   fi
 
-  log "Generating SSH key for email: $USER_EMAIL"
-  ssh-keygen -t ed25519 -C "$USER_EMAIL"
+  log "Generating SSH key for email: $SSH_EMAIL"
+  ssh-keygen -t ed25519 -C "$SSH_EMAIL"
   log "SSH key generated successfully!"
 
   log "Adding SSH agent in background..."
@@ -405,7 +405,7 @@ main() {
   parse_arguments "$@"
 
   log "Starting installation from $DIR..."
-  log "Email for SSH key: $USER_EMAIL"
+  log "Email for SSH key: $SSH_EMAIL"
   log "This script will configure your environment with the following steps:"
 
   echo "1. Configure Zsh"
