@@ -7,12 +7,11 @@ My dev tools for macOS and Linux
 | Beekeeper Studio | Database management tool                       | [https://www.beekeeperstudio.io/](https://www.beekeeperstudio.io/)                   |
 | Cursor           | AI-powered code editor                         | [https://www.cursor.com/](https://www.cursor.com/)                                   |
 | Deno             | Runtime for JavaScript and TypeScript          | [https://deno.com/](https://deno.com/)                                               |
-| Docker           | Containerization tool                          | [https://www.docker.com/](https://www.docker.com/)                                   |
 | Flatpak          | Package manager for Linux                      | [https://flatpak.org/](https://flatpak.org/)                                         |
 | Git              | Distributed version control system             | [https://git-scm.com/](https://git-scm.com/)                                         |
 | MongoDB Compass  | Database management tool                       | [https://www.mongodb.com/products/compass](https://www.mongodb.com/products/compass) |
 | Node.js          | JavaScript runtime for application development | [https://nodejs.org/](https://nodejs.org/)                                           |
-| OrbStack         | Docker manager                                 | [https://orbstack.com/](https://orbstack.com/)                                       |
+| OrbStack         | Containerization tool                          | [https://orbstack.com/](https://orbstack.com/)                                       |
 | Redis            | Database                                       | [https://redis.io/](https://redis.io/)                                               |
 | VSCode           | Code editor                                    | [https://code.visualstudio.com/](https://code.visualstudio.com/)                     |
 | Yaak             | API client                                     | [https://yaak.app/](https://yaak.app/)                                               |
