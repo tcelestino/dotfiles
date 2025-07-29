@@ -41,6 +41,7 @@ fi
 ZSH_WEB_SEARCH_ENGINES=(
   reddit "https://www.reddit.com/search/?q="
   linkedin "https://www.linkedin.com/search/results/all/?keywords="
+  mdn "https://developer.mozilla.org/search?q="
 )
 
 # deno settings
