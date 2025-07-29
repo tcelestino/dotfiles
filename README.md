@@ -1,42 +1,72 @@
 # dotfiles
 
-Hey! 👋
+This is my dotfiles for personal app configs and customizations. I mainly use zsh, but you might adapt for bash or other shells.
 
-This repo stores my personal app configs and customizations. I mainly use zsh, but you can adapt for bash or other shells.
-Since I work with macOS and Ubuntu, configs are optimized for these OSs. But no worries - you can easily tweak them for other systems too!
+This repo is 100% open for you to explore and customize.
 
-## Usage
+## Requirements
 
-This repo is 100% open for you to explore and customize. Just clone it and swap my configs with yours - makes it super easy to get your dev environment up and running on any new machine.
+You need to have the following tools installed:
 
-## Getting Started
+- [Homebrew](https://brew.sh/)
+- [zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default)
+- [oh-my-zsh](https://ohmyz.sh/#install)
+- [git](https://git-scm.com/downloads)
 
-1. Clone this repository to your local machine:
+## How to use
+
+1. Install Homebrew:
 
 ```bash
-git clone git@github.com:tcelestino/dotfiles.git
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-2. Open folder `dotfiles` and set run file to install
+2. Clone this repository and open folder `dotfiles`:
 
 ```bash
-chmod +x install
+git clone git@github.com:tcelestino/dotfiles.git && cd dotfiles
 ```
-3. Open `.zshrc` file and change variables "USER_NAME", "USER_EMAIL" and "NPM_SCOPE". You might set `GH_TOKEN` and `NPM_TOKEN` too.
+
+3. Open `.zshrc` file and change variables `USER_NAME`, `USER_EMAIL` and `NPM_SCOPE`. You might set `GH_TOKEN` and `NPM_TOKEN` too.
+4. Set your email and name for git on `.gitconfig` file.
+
+5. Install zsh (if you not have it installed):
 
 ```bash
-
-4. Run the install script
-
-```bash
-./install
+## linux
+sudo apt update && sudo apt install zsh
 ```
-⚠️ **Don't forget to set values `GH_TOKEN` and `NPM_TOKEN`!!**
+
+```bash
+## macos
+brew install zsh
+```
+
+_zsh is default shell on latest versions of macOS_
+
+6. Install oh-my-zsh:
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+7. Run the install script:
+
+```bash
+./install --ssh-email <your-email-here>
+```
+
+## Apps and dev tools
+
+My apps and dev tools for Linux and macOS.
+
+- [Linux apps](docs/linux-apps.md)
+- [macOS apps](docs/macos-apps.md)
+- [Dev tools](docs/dev-tools.md)
 
 ## Additional Configurations
 
 - To set the keyboard layout to include the 'ç' character on Ubuntu, follow the steps in the article "[Ajeitando o cedilha errado (ć) no Ubuntu Linux](https://www.danielkossmann.com/pt/ajeitando-cedilha-errado-ubuntu-linux/)"
-- If you use iTerm2, you might import the color scheme and other configurations into iTerm2. The settings can be found in the "iterm2" folder.
 
 ## Contributing
 
@@ -45,4 +75,5 @@ If you have any suggestions, improvements, or bug fixes, feel free to open an is
 This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. Please use it when making changes to the codebase.
 
 ## License
+
 See in [LICENSE](LICENSE).

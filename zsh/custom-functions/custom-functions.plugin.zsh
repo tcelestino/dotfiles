@@ -67,3 +67,29 @@ function logprocess() {
     journalctl -f -u "$1" 2>/dev/null || tail -f /var/log/syslog | grep "$1"
   fi
 }
+
+# open work folder
+function workFolder() {
+  if [ -d ~/Projects ]; then
+    cd ~/Projects
+  elif [ -d ~/projects ]; then
+    cd ~/projects
+  elif [ -d ~/work ]; then
+    cd ~/work
+  elif [ -d ~/Work ]; then
+    cd ~/Work
+  else
+    echo "Folder ~/Projects, ~/projects, ~/work or ~/Work does not exist"
+  fi
+}
+
+# show the size of a file or directory on macos and linux
+function filesize() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    stat -f "%z bytes" "$@"
+  else
+    # Linux
+    stat -c "%s bytes" "$@"
+  fi
+}

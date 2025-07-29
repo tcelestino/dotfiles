@@ -5,27 +5,83 @@ set -euo pipefail
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # Get current location
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-# Helper function to print info messages
+# Global variable for user email
+SSH_EMAIL=""
+
+# Array to store completed steps
+declare -a completed_steps=()
+
+# Show usage information
+# @param $1 Exit code (optional)
+show_usage() {
+  local exit_code="${1:-0}"
+  echo "Usage: $0 --ssh-email <ssh-email>"
+  echo ""
+  echo "Options:"
+  echo "  --ssh-email    Email address for SSH key generation (required)"
+  echo "  -h, --help     Show this help message"
+  echo ""
+  echo "Example:"
+  echo "  $0 --ssh-email user@example.com"
+  exit "$exit_code"
+}
+
+# Parse command line arguments
+parse_arguments() {
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --ssh-email)
+        SSH_EMAIL="$2"
+        shift 2
+        ;;
+      -h|--help)
+        show_usage 0
+        ;;
+      *)
+        echo -e "${RED}[ERROR]${NC} Unknown option: $1"
+        show_usage 1
+        ;;
+    esac
+  done
+
+  # Validate required arguments
+  if [[ -z "$SSH_EMAIL" ]]; then
+    echo -e "${RED}[ERROR]${NC} Email address is required"
+    show_usage 1
+  fi
+
+  # Validate email format (basic validation)
+  if [[ ! "$SSH_EMAIL" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
+    echo -e "${RED}[ERROR]${NC} Invalid email format: $SSH_EMAIL"
+    exit 1
+  fi
+}
+
+# Register a completed step
+# @param $1 Step name
+register_completed_step() {
+  local step="$1"
+  completed_steps+=("$step")
+}
+
+# Print info messages
+# @param $1 Message
 log() {
   echo -e "${GREEN}[INFO]${NC} $1"
 }
 
-# Helper function to print error messages in red and exit
+# Print error messages in red and exit
+# @param $1 Message
 error() {
   echo -e "${RED}[ERROR]${NC} $1"
   exit 1
 }
-
-# Verify if required dependencies (Node.js, Homebrew, Git) are installed
-# check_dependencies() {
-#   command -v node >/dev/null 2>&1 || error "Node.js is required but not installed. https://nodejs.org/"
-#   command -v git >/dev/null 2>&1 || error "Git is required but not installed. https://git-scm.com/downloads"
-# }
 
 # Create a symbolic link
 # @param $1 Source file path
@@ -91,88 +147,169 @@ copy_file() {
   fi
 }
 
-# Install Homebrew if not already installed
-install_brew() {
-  if ! command -v brew >/dev/null 2>&1; then
-    log "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  else
-    log "Homebrew is already installed."
-  fi
-}
-
-# Install Oh My Zsh if not already installed
-install_oh_my_zsh() {
-  if [ -d "$HOME/.oh-my-zsh" ]; then
-      log "oh-my-zsh is already installed."
-  else
-      log "Installing oh-my-zsh..."
-      if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
-          error "Failed to install oh-my-zsh"
-      fi
-  fi
-}
-
-# Install Deno runtime if not already installed
-install_deno() {
-  if [ -d "$HOME/.deno/bin/deno" ]; then
-    log "Deno is already installed.."
-  else
-    log "Installing Deno"
-    if ! sh -c "$(curl -fsSL https://deno.land/install.sh)"; then
-      error "Failed to install Deno"
-    fi
-  fi
-}
-
-# Configure Git settings by linking gitconfig file
-setup_git() {
-  copy_file "$DIR/git/.gitconfig" "$HOME/.gitconfig"
-  copy_file "$DIR/git/.gitignore" "$HOME/.gitignore"
-  copy_file "$DIR/git/.gitattributes" "$HOME/.gitattributes"
-}
-
-# Configure Zsh settings by linking various configuration files
+# Configure zsh
 setup_zsh() {
-  copy_file "$DIR/zsh/.zshrc" "$HOME/.zshrc"
+  if ! command -v zsh >/dev/null 2>&1; then
+    error "zsh is not installed. Please install zsh before continuing."
+  fi
+
+  if [ "$DOTFILES_ZSH_SETUP" = true ]; then
+    log "oh-my-zsh already setup. Skipping..."
+    return
+  fi
+
+  # copy zshrc based on the OS
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    log "Copying zshrc for macOS..."
+    copy_file "$DIR/macos/.zshrc" "$HOME/.zshrc"
+  else
+    log "Copying zshrc for Linux..."
+    copy_file "$DIR/linux/.zshrc" "$HOME/.zshrc"
+  fi
+
   copy_dir "$DIR/zsh/themes" "$HOME/.oh-my-zsh/themes"
   copy_file "$DIR/zsh/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
   copy_dir "$DIR/zsh/custom-functions" "$HOME/.oh-my-zsh/plugins/custom-functions"
+
+  register_completed_step "zsh"
+  log "zsh settings configured successfully!"
+
+  DOTFILES_ZSH_SETUP=true
 }
 
-# Install global NPM packages required for development
-install_global_npm_pkg() {
-  log "Installing global npm packages..."
-  npm install -g git-cz # https://github.com/streamich/git-cz
-  npm install -g n # https://github.com/tj/n
-  npm install -g fastify-cli #https://fastify.dev/
-}
-
-# Configure NPM settings and install global packages
-setup_npm() {
-  copy_file "$DIR/.npmrc" "$HOME/.npmrc"
-
-  # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
-  if [ -d "$HOME/.npm-packages" ]; then
-    log ".npm-packages folder exists"
-  else
-    mkdir -p "$HOME/.npm-packages"
+# Configure Git
+setup_git() {
+  if [ "$DOTFILES_GIT_SETUP" = true ]; then
+    log "git already setup. Skipping..."
+    return
   fi
 
-  install_global_npm_pkg
+  copy_file "$DIR/git/.gitconfig" "$HOME/.gitconfig"
+  copy_file "$DIR/git/.gitignore" "$HOME/.gitignore"
+  copy_file "$DIR/git/.gitattributes" "$HOME/.gitattributes"
+  copy_file "$DIR/git/.git-commit-template" "$HOME/.git-commit-template"
+  register_completed_step "Git"
+  log "Git settings configured successfully!"
+
+  DOTFILES_GIT_SETUP=true
 }
 
 # Configure Homebrew and install packages from Brewfile
 setup_brew() {
-  copy_file "$DIR/Brewfile" "$HOME/Brewfile"
+  if ! command -v brew >/dev/null 2>&1; then
+    error "Homebrew is not installed. Please install Homebrew first."
+  fi
+
+  if [ "$DOTFILES_BREW_SETUP" = true ]; then
+    log "Brewfile already setup. Skipping..."
+    return
+  fi
+
+  # copy Brewfile based on the OS
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    log "Copying Brewfile for macOS..."
+    copy_file "$DIR/macos/.Brewfile" "$HOME/.Brewfile"
+  else
+    log "Copying Brewfile for Linux..."
+    copy_file "$DIR/linux/.Brewfile" "$HOME/.Brewfile"
+  fi
+
   log "Executing brew bundle install..."
-  if ! brew bundle install; then
+  if ! brew bundle install --file="$HOME/.Brewfile"; then
       error "Brew bundle install failed"
   fi
+  register_completed_step "Homebrew"
+  log "Homebrew settings configured successfully!"
+
+  DOTFILES_BREW_SETUP=true
 }
 
-# Install custom fonts based on the operating system
+# Configure NPM
+setup_npm() {
+  if [ "$DOTFILES_NPM_SETUP" = true ]; then
+    log "npm already setup. Skipping..."
+    return
+  fi
+
+  copy_file "$DIR/.npmrc" "$HOME/.npmrc"
+  register_completed_step "NPM"
+  log "NPM configured successfully!"
+
+  # Install npm globally without sudo. Based on https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
+  if [ -d "$HOME/.npm-packages" ]; then
+    log ".npm-packages folder exists"
+    return
+  else
+    mkdir -p "$HOME/.npm-packages"
+  fi
+
+  DOTFILES_NPM_SETUP=true
+}
+
+# Install global npm packages
+setup_global_npm_packages() {
+  if ! command -v node >/dev/null 2>&1; then
+    error "node is not installed. Please install node first."
+  fi
+
+  if [ "$DOTFILES_NPM_SETUP" = true ]; then
+    log "global npm packages already setup. Skipping..."
+    return
+  fi
+
+  log "Installing global npm packages..."
+  npm install -g npm-check-updates n git-cz @nestjs/cli fastify-cli yarn
+  register_completed_step "npm packages"
+  log "npm packages installed successfully!"
+
+  DOTFILES_NPM_SETUP=true
+}
+
+# Configure SSH
+setup_ssh() {
+  if [ -f "$HOME/.ssh/id_ed25519" ]; then
+    log "SSH key already exists. Skipping..."
+    return
+  fi
+
+  if [ "$DOTFILES_SSH_SETUP" = true ]; then
+    log "SSH already setup. Skipping..."
+    return
+  fi
+
+  log "Generating SSH key for email: $SSH_EMAIL"
+  ssh-keygen -t ed25519 -C "$SSH_EMAIL"
+  log "SSH key generated successfully!"
+
+  log "Adding SSH agent in background..."
+  eval "$(ssh-agent -s)"
+  log "SSH agent added to the background successfully!"
+
+  log "Adding SSH key to the ssh-agent..."
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+  else
+    ssh-add ~/.ssh/id_ed25519
+  fi
+  log "SSH key added to the ssh-agent successfully!"
+
+  log "Adding SSH config..."
+  copy_file "$DIR/ssh/config" "$HOME/.ssh/config"
+  log "SSH config added successfully!"
+
+  register_completed_step "ssh"
+  log "SSH configured successfully!"
+
+  DOTFILES_SSH_SETUP=true
+}
+
+# Configure my favorites fonts
 setup_fonts() {
+  if [ "$DOTFILES_FONTS_SETUP" = true ]; then
+    log "fonts already setup. Skipping..."
+    return
+  fi
+
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
     local font_dir="$HOME/Library/Fonts"
@@ -180,7 +317,10 @@ setup_fonts() {
       mkdir -p "$font_dir"
     fi
     log "Installing fonts for macOS..."
-    cp "$DIR/extras/fonts/"* "$font_dir/"
+    copy_dir "$DIR/extras/fonts/"* "$font_dir/"
+    log "Fonts installed successfully!"
+
+    DOTFILES_FONTS_SETUP=true
   elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # Ubuntu/Linux
     local font_dir="$HOME/.local/share/fonts"
@@ -188,37 +328,133 @@ setup_fonts() {
       mkdir -p "$font_dir"
     fi
     log "Installing fonts for Linux..."
-    cp "$DIR/extras/fonts/"* "$font_dir/"
+    copy_dir "$DIR/extras/fonts/"* "$font_dir/"
+
+    if ! fc-cache -f -v; then
+      log "Installing Fontconfig..."
+      sudo apt update && sudo apt install fontconfig
+      log "Fontconfig installed successfully!"
+    fi
+
+    log "Fontcaching..."
     fc-cache -f -v
+    log "Fontcaching done!"
+
+    register_completed_step "Fonts"
+    log "Fonts configured successfully!"
+
+    DOTFILES_FONTS_SETUP=true
   else
     error "Unsupported operating system"
   fi
 }
 
-# Configure macOS system settings if running on macOS
+# Configure macOS
 setup_macos() {
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    log "Setting up macOS..."
-    sh .macos
-    copy_file "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config" # Configure duti (macOS default application manager) settings
+  if [ "$DOTFILES_MACOS_SETUP" = true ]; then
+    log "macOS already setup. Skipping..."
+    return
   fi
+
+  log "Settings for macOS"
+
+  if [[ -x "$DIR/macos/.macos" ]]; then
+    sh "$DIR/macos/.macos"
+    register_completed_step "macOS"
+    log "macOS settings configured successfully!"
+
+    copy_file "$DIR/extras/duti_picview.config" "$HOME/duti_picview.config" # Configure duti (macOS default application manager) settings
+  else
+    error "$DIR/macos/.macos not found or not executable."
+  fi
+
+  DOTFILES_MACOS_SETUP=true
+}
+
+ask_continue() {
+  local message="$1"
+  local step="$2"
+  echo -e "\n${GREEN}[INFO]${NC} Step $step: $message"
+  read -p "Your choice (Y/n/q): " response
+
+  if [ -z "$response" ]; then
+    response="y"
+  fi
+
+  case "$response" in
+    [Yy]*)
+      return 0
+      ;;
+    [Nn]*)
+      log "Step $step skipped."
+      return 1
+      ;;
+    [Qq]*)
+      log "Installation interrupted by user."
+      exit 0
+      ;;
+    *)
+      log "Invalid option. Please try again."
+      ask_continue "$message" "$step"
+      ;;
+  esac
 }
 
 main() {
+  # Parse command line arguments first
+  parse_arguments "$@"
+
   log "Starting installation from $DIR..."
+  log "Email for SSH key: $SSH_EMAIL"
+  log "This script will configure your environment with the following steps:"
 
-  install_oh_my_zsh
-  install_brew
-  install_deno
+  echo "1. Configure Zsh"
+  echo "2. Configure Homebrew and install packages"
+  echo "3. Configure Git"
+  echo "4. Configure SSH"
+  echo "5. Configure NPM"
+  echo "6. Install global npm packages"
+  # echo "7. Set custom fonts"
 
-  setup_zsh
-  setup_brew
-  setup_git
-  setup_npm
-  setup_macos
-  setup_fonts
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "7. Configure macOS"
+  fi
 
-  log "Settings completed successfully! 🎉"
+  if ask_continue "Configure Zsh" "1"; then
+    setup_zsh
+  fi
+
+  if ask_continue "Configure Homebrew and install packages" "2"; then
+    setup_brew
+  fi
+
+  if ask_continue "Configure Git" "3"; then
+    setup_git
+  fi
+
+  if ask_continue "Configure SSH" "4"; then
+    setup_ssh
+  fi
+
+  if ask_continue "Configure NPM" "5"; then
+    setup_npm
+  fi
+
+  if ask_continue "Install global npm packages" "6"; then
+    setup_global_npm_packages
+  fi
+
+  # if ask_continue "Set custom fonts" "7"; then
+  #   setup_fonts
+  # fi
+
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    if ask_continue "Configure macOS" "7"; then
+      setup_macos
+    fi
+  fi
+
+  log "Configurations completed successfully! 🎉"
 }
 
 main "$@"
