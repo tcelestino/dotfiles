@@ -30,6 +30,7 @@
   lg = log --graph --all --pretty=format:'%C(yellow)%h %ad %C(green)%an%C(auto)%d %Creset%s' --date=short --decorate
   ls = lg
   ph = push origin HEAD
+  pl = pull origin HEAD
   st = status
   amend = commit --amend -C HEAD
   undo = reset HEAD~1 --mixed
@@ -67,7 +68,6 @@
   ra = !git amend --reset-author -n
   pushall = !git remote | xargs -n1 git push
   pushalltags = !git remote | xargs -n1 git push --tags
-  deletebranches = !git branch --merged | grep -v \\* | xargs git branch -D
+  delbranches = "!git branch --merged | grep -v \\* | xargs git branch -D"
   prune = !git remote prune origin
   cleanup = "!f() { git branch | grep -v \" $(git rev-parse --abbrev-ref HEAD)\" | xargs git branch -D; git fetch --prune;}; f"
-
