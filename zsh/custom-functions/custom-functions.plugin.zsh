@@ -93,3 +93,31 @@ function filesize() {
     stat -c "%s bytes" "$@"
   fi
 }
+
+# ignore files from git
+# usage: ignore_from_git file1.md file2.txt folder1/ folder2/**
+ignore_from_git() {
+  local exclude_file=".git/info/exclude"
+
+  if [ ! -f "$exclude_file" ]; then
+    echo "Error: Git repository not found (file $exclude_file does not exist)"
+    return 1
+  fi
+
+  if [ $# -eq 0 ]; then
+    echo "Error: No file or folder was specified"
+    echo "Usage: ignore_from_git file1.md file2.txt folder1/ folder2/**"
+    return 1
+  fi
+
+  for pattern in "$@"; do
+    local escaped_pattern=$(printf '%s\n' "$pattern" | sed 's/[[\.*^$()+?{|]/\\&/g')
+
+    if ! grep -q "^${escaped_pattern}$" "$exclude_file" 2>/dev/null; then
+      echo "$pattern" >> "$exclude_file"
+      echo "Added: $pattern to $exclude_file"
+    else
+      echo "$pattern already exists in $exclude_file"
+    fi
+  done
+}
