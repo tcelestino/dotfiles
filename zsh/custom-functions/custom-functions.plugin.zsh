@@ -99,21 +99,21 @@ function filesize() {
 ignore_from_git() {
   local exclude_file=".git/info/exclude"
 
-  if [ ! -f "$exclude_file" ]; then
-    echo "Error: Git repository not found (file $exclude_file does not exist)"
+   if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "Error: Not a git repository." >&2
     return 1
   fi
 
   if [ $# -eq 0 ]; then
-    echo "Error: No file or folder was specified"
-    echo "Usage: ignore_from_git file1.md file2.txt folder1/ folder2/**"
+    echo "Error: No file or folder was specified." >&2
+    echo "Usage: ignore_from_git file1.md file2.txt folder1/ folder2/**" >&2
     return 1
   fi
 
   for pattern in "$@"; do
     local escaped_pattern=$(printf '%s\n' "$pattern" | sed 's/[[\.*^$()+?{|]/\\&/g')
 
-    if ! grep -q "^${escaped_pattern}$" "$exclude_file" 2>/dev/null; then
+    if ! grep -Fxq -- "$pattern" "$exclude_file" 2>/dev/null; then
       echo "$pattern" >> "$exclude_file"
       echo "Added: $pattern to $exclude_file"
     else
