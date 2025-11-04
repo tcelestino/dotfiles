@@ -94,9 +94,9 @@ function filesize() {
   fi
 }
 
-# ignore files from git
-# usage: ignore_from_git file1.md file2.txt folder1/ folder2/**
-ignore_from_git() {
+# exclude files from git
+# usage: git_exclude file1.md file2.txt folder1/ folder2/**
+git_exclude() {
   local exclude_file=".git/info/exclude"
 
    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -106,7 +106,7 @@ ignore_from_git() {
 
   if [ $# -eq 0 ]; then
     echo "Error: No file or folder was specified." >&2
-    echo "Usage: ignore_from_git file1.md file2.txt folder1/ folder2/**" >&2
+    echo "Usage: git_exclude file1.md file2.txt folder1/ folder2/**" >&2
     return 1
   fi
 
