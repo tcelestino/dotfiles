@@ -106,7 +106,7 @@ git_exclude() {
 
   if [ $# -eq 0 ]; then
     echo "Error: No file or folder was specified." >&2
-    echo "Usage: ignore_from_git file1.md file2.txt folder1/ folder2/**" >&2
+    echo "Usage: git_exclude file1.md file2.txt folder1/ folder2/**" >&2
     return 1
   fi
 
