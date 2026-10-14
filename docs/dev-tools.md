@@ -6,7 +6,6 @@ My dev tools for macOS and Linux
 | ---------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------ |
 | Beekeeper Studio | Database management tool                       | [https://www.beekeeperstudio.io/](https://www.beekeeperstudio.io/)                   |
 | Cursor           | AI-powered code editor                         | [https://www.cursor.com/](https://www.cursor.com/)                                   |
-| Deno             | Runtime for JavaScript and TypeScript          | [https://deno.com/](https://deno.com/)                                               |
 | Flatpak          | Package manager for Linux                      | [https://flatpak.org/](https://flatpak.org/)                                         |
 | Git              | Distributed version control system             | [https://git-scm.com/](https://git-scm.com/)                                         |
 | MongoDB Compass  | Database management tool                       | [https://www.mongodb.com/products/compass](https://www.mongodb.com/products/compass) |
